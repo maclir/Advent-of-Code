@@ -55,8 +55,11 @@ fun part1(input: String): Int {
     return calculateEnergy(30, "AA", all, valvesLeft)
 }
 
+val cache = mutableMapOf<String, Int>()
 fun calculateEnergy(minutesLeft: Int, current: String, all: Map<String, Valve>, valvesLeft: MutableSet<String>): Int {
     if (minutesLeft <= 0 || valvesLeft.isEmpty()) return 0
+    val cacheValue = cache["$minutesLeft|$current|$valvesLeft"]
+    if (cacheValue != null) return cacheValue
 
     val newValvesLeft = valvesLeft.toMutableSet()
     newValvesLeft.remove(current)
@@ -65,10 +68,13 @@ fun calculateEnergy(minutesLeft: Int, current: String, all: Map<String, Valve>, 
     val newPressureRelease = (minutesLeft - 1) * currentRate
     val newMinutesLeft = if (currentRate == 0) minutesLeft else minutesLeft - 1
 
-    return all[current]!!.othersDistance.filterKeys { valve -> newValvesLeft.contains(valve) }
+    val result = all[current]!!.othersDistance.filterKeys { valve -> newValvesLeft.contains(valve) }
         .filterValues { distance -> newMinutesLeft - distance > 0 }.maxOfOrNull { (newCurrent, distance) ->
             newPressureRelease + calculateEnergy(newMinutesLeft - distance, newCurrent, all, newValvesLeft)
         } ?: newPressureRelease
+
+    cache["$minutesLeft|$current|$valvesLeft"] = result
+    return result
 }
 
 fun getDistance(all: MutableMap<String, Valve>, name: String, oName: String, skipParents: MutableSet<String>): Int {
