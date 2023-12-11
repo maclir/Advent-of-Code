@@ -11,3 +11,6 @@ fun Int.leastCommonMultiple(other: Int): Int {
     while (bigger * multiple % smaller != 0) multiple++
     return bigger * multiple
 }
+
+fun <E> Iterable<E>.indicesOf(e: E)
+        = mapIndexedNotNull{ index, elem -> index.takeIf{ elem == e } }
