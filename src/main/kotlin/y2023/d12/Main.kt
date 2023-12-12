@@ -5,8 +5,8 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     val input = File(
-        "src/main/kotlin/y2023/d12/Input-test.txt"
-//        "src/main/kotlin/y2023/d12/Input.txt"
+//        "src/main/kotlin/y2023/d12/Input-test.txt"
+        "src/main/kotlin/y2023/d12/Input.txt"
     ).readText(Charsets.UTF_8)
 
     println("${
@@ -27,112 +27,70 @@ fun main() {
     } ms")
 }
 
-data class Line(val line: String, val damageCounts: List<Int>)
-
-private fun Line.replaceSpring(index: Int, char: Char) =
-    Line(line.replaceRange(index, index + 1, char.toString()), damageCounts)
-
-private fun Line.hasPlaceholder() = line.contains('?')
-private fun Line.validPlaceholderReplacedOptions(index: Int) =
-    listOf(replaceSpring(index, '#'), replaceSpring(index, '.')).filter { it.isValid() != false }
-
-private val invalidCache = mutableSetOf<String>()
-private val validCache = mutableSetOf<String>()
-
-private fun Line.isValid(): Boolean? {
-    if (invalidCache.contains("$line|${damageCounts.firstOrNull()}")) {
-//        println("CACHE HIT")
-        return false
-    }
-
-    if (validCache.contains("$line|$damageCounts")) {
-//        println("CACHE HIT VALID")
+//private val cache = mutableSetOf<String>()
+data class InnerLine(val line: String)  {
+    override fun equals(other: Any?): Boolean {
+        if (other !is InnerLine) return false
+//        if (cache.contains("$line|${other.line}")) return true
+        for (index in line.indices) {
+            if (line[index] != '?' && other.line[index] != '?' && line[index] != other.line[index]) return false
+        }
+//        cache.add("$line|${other.line}")
+//        cache.add("${other.line}|$line")
         return true
     }
 
-    if (damageCounts.isEmpty()) {
-        val valid = !line.contains('#')
-        if (valid) validCache.add("$line|$damageCounts")
-        else invalidCache.add("$line|${damageCounts.firstOrNull()}")
-        return valid
+    override fun hashCode(): Int {
+        return line.hashCode()
     }
 
-    val pattern = if (damageCounts.size > 1) "^([.]*?[#]{${damageCounts.first()}}[.]{1}).*"
-    else "^([.]*?[#]{${damageCounts.first()}}).*"
+}
+data class Line(val line: InnerLine, val damageCounts: List<Int>)
 
-    val matches = Regex(pattern).find(line)
-    if (matches == null) {
-        val newPattern = if (damageCounts.size > 1) "^([.?]*?[#?]{${damageCounts.first()}}[.?]{1}).*"
-        else "^([.?]*?[#?]{${damageCounts.first()}}).*"
+private fun Line.getPossibleLinesCount(): Int {
+    var allPossibleCount = 0
+    fun dive(diveLine: InnerLine, diveDamageCounts: List<Int>, startIndex: Int) {
+        var index = startIndex
+        while (true) {
+            if (index + diveDamageCounts.sum() + diveDamageCounts.count() - 1 > diveLine.line.length) return
+            if (InnerLine(diveLine.line.substring(0, index)) != InnerLine(line.line.substring(0, index))) return
+            if (InnerLine(diveLine.line.substring(index, diveLine.line.length).replace('.', '?')) != InnerLine(line.line.substring(index, diveLine.line.length))) return
 
-        val newMatches = Regex(newPattern).find(line)
-        if (newMatches != null) return null
-        invalidCache.add("$line|${damageCounts.firstOrNull()}")
-        return false
+            val endIndex = index + diveDamageCounts.first()
+            val newDiveLine =
+                InnerLine(diveLine.line.replaceRange(index, endIndex, CharArray(diveDamageCounts.first()) { '#' }.joinToString("")))
+
+            if (diveDamageCounts.size > 1) {
+                dive(newDiveLine, diveDamageCounts.drop(1), endIndex + 1)
+            } else {
+                if (line == newDiveLine) allPossibleCount++
+            }
+            index++
+        }
     }
-
-    val valid = Line(line.removeRange(matches.groups[1]!!.range), damageCounts.drop(1)).isValid()
-    if (valid == true) validCache.add("$line|$damageCounts")
-    else if (valid == false) invalidCache.add("$line|${damageCounts.firstOrNull()}")
-
-    return valid
+    dive(InnerLine(CharArray(line.line.length) { '.' }.joinToString("")), damageCounts, 0)
+    return allPossibleCount
 }
 
 fun part1(input: String): Int {
-    val lines = input.lines().map { line ->
+    return input.lines().map { line ->
         val (springs, damageCounts) = line.split(" ")
-        Line(springs, damageCounts.split(",").map { it.toInt() })
-    }.toMutableList()
-
-    return lines.sumOf { line ->
-        fun dive(newLine: Line): Int {
-            if (!newLine.hasPlaceholder()) {
-                return if (newLine.isValid() == true) 1
-                else 0
-            }
-            val placeholderIndex = newLine.line.indexOf('?')
-            if (placeholderIndex == -1) return 0
-            val validOptions = newLine.validPlaceholderReplacedOptions(placeholderIndex)
-            var count = 0
-            for (valid in validOptions) {
-                count += dive(valid)
-            }
-            return count
-        }
-
-        val t = dive(line)
-        println(line)
-        println(t)
-        t
+        Line(InnerLine(springs), damageCounts.split(",").map { it.toInt() })
+    }.sumOf { line ->
+        val count = line.getPossibleLinesCount()
+        println("$line: $count")
+        count
     }
 }
 
-fun part2(input: String): Int {
-    val lines = input.lines().map { line ->
+fun part2(input: String): Long {
+    return input.lines().map { line ->
         val (springs, damageCounts) = line.split(" ")
         val unfoldedDamageCounts = List(5) { damageCounts }.joinToString(",")
-        Line(List(5) { springs }.joinToString("?"), unfoldedDamageCounts.split(",").map { it.toInt() })
-    }.toMutableList()
-
-    return lines.sumOf { line ->
-        fun dive(newLine: Line): Int {
-            if (!newLine.hasPlaceholder()) {
-                return if (newLine.isValid() == true) 1
-                else 0
-            }
-            val placeholderIndex = newLine.line.indexOf('?')
-            if (placeholderIndex == -1) return 0
-            val validOptions = newLine.validPlaceholderReplacedOptions(placeholderIndex)
-            var count = 0
-            for (valid in validOptions) {
-                count += dive(valid)
-            }
-            return count
-        }
-
-        val t = dive(line)
-        println(line)
-        println(t)
-        t
+        Line(InnerLine(List(5) { springs }.joinToString("?")), unfoldedDamageCounts.split(",").map { it.toInt() })
+    }.sumOf { line ->
+        val count = line.getPossibleLinesCount().toLong()
+        println("$line: $count")
+        count
     }
 }
