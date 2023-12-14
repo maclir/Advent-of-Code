@@ -5,8 +5,8 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     val input = File(
-        "src/main/kotlin/y2023/d12/Input-test.txt"
-//        "src/main/kotlin/y2023/d12/Input.txt"
+//        "src/main/kotlin/y2023/d12/Input-test.txt"
+        "src/main/kotlin/y2023/d12/Input.txt"
     ).readText(Charsets.UTF_8)
 
     println("${
@@ -36,18 +36,22 @@ private fun String.matchesWithPlaceholder(otherLine: String): Boolean {
     return true
 }
 
-private fun Line.getPossibleLinesCount2(): Int {
-    val cache = mutableMapOf<Pair<String, Int>, Int>()
+private fun Line.getPossibleLinesCount(): Long {
+    val cache = mutableMapOf<Pair<Int, Int>, Long>()
 
-    fun dive(diveLine: Line, startIndex: Int): Int {
-        val cacheKey = Pair(diveLine.line.substring(startIndex, diveLine.line.length), diveLine.damageCounts.size)
+    fun dive(diveLine: Line, startIndex: Int): Long {
+        val cacheKey = Pair(startIndex, diveLine.damageCounts.size)
         val cachedResult = cache[cacheKey]
         if (cachedResult != null) {
-//            println("$cacheKey: $cachedResult | $diveLine")
-//            return cachedResuclt
+            return cachedResult
         }
 
-        var result = 0
+        if (!diveLine.line.substring(0, startIndex).matchesWithPlaceholder(line.substring(0, startIndex))) {
+            return 0
+        }
+
+        var result = 0L
+
 
         val replacement = if (diveLine.damageCounts.size == 1 && startIndex + diveLine.damageCounts.first() == line.length) {
             CharArray(diveLine.damageCounts.first()) { '#' }.joinToString("")
@@ -77,7 +81,6 @@ private fun Line.getPossibleLinesCount2(): Int {
             )
         }
 
-        if (cachedResult != null && cachedResult != result) println("!!!!DIFF $cacheKey: $result != $cachedResult | $diveLine")
         cache[cacheKey] = result
         return result
     }
@@ -86,12 +89,12 @@ private fun Line.getPossibleLinesCount2(): Int {
 }
 
 
-fun part1(input: String): Int {
+fun part1(input: String): Long {
     return input.lines().map { line ->
         val (springs, damageCounts) = line.split(" ")
         Line(springs, damageCounts.split(",").map { it.toInt() })
     }.sumOf { line ->
-        line.getPossibleLinesCount2()
+        line.getPossibleLinesCount()
     }
 }
 
@@ -101,6 +104,6 @@ fun part2(input: String): Long {
         val unfoldedDamageCounts = List(5) { damageCounts }.joinToString(",")
         Line(List(5) { springs }.joinToString("?"), unfoldedDamageCounts.split(",").map { it.toInt() })
     }.sumOf { line ->
-        line.getPossibleLinesCount2().toLong()
+        line.getPossibleLinesCount()
     }
 }
