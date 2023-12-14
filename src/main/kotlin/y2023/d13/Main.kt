@@ -3,7 +3,7 @@ package y2023.d13
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d13/Input-test.txt"
         "src/main/kotlin/y2023/d13/Input.txt"
@@ -27,7 +27,7 @@ fun main() {
     } ms")
 }
 
-fun String.transpose(): String {
+private fun String.transpose(): String {
     val lines = lines()
     val rows = lines.size
     val columns = lines().first().length
@@ -40,7 +40,7 @@ fun String.transpose(): String {
     return transposed.joinToString("\n") { it.joinToString() }
 }
 
-fun getReflectionIndex(pattern: String): List<Int> {
+private fun getReflectionIndex(pattern: String): List<Int> {
     val rows = pattern.lines()
     val result = mutableListOf<Int>()
     outer@ for (index in 1 until rows.size) {
@@ -54,7 +54,7 @@ fun getReflectionIndex(pattern: String): List<Int> {
     return result
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     var sum = 0
     input.split("\n\n").forEach { pattern ->
         run breaking@{
@@ -75,7 +75,7 @@ fun part1(input: String): Int {
     return sum
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     var sum = 0
     input.split("\n\n").forEach { originalPattern ->
         val originalRowIndex = getReflectionIndex(originalPattern).firstOrNull()

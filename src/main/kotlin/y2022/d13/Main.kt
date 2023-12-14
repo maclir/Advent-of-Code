@@ -2,14 +2,14 @@ package y2022.d13
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d13/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d13/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val divider1 = ListItem(listOf(ListItem(listOf(IntItem(2)))))
     val divider2 = ListItem(listOf(ListItem(listOf(IntItem(6)))))
     val all = input.replace("\n\n", "\n").split("\n").map { line ->
@@ -25,7 +25,7 @@ fun part2(input: String): Int {
     return decoder
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val all = input.split("\n\n").map { pair ->
         pair.split("\n").map { line ->
             line.toItems()[0] as ListItem
@@ -114,17 +114,17 @@ private fun String.toItems(): List<Item> {
 }
 
 sealed class Item
-data class IntItem(val item: Int) : Item() {
+private data class IntItem(val item: Int) : Item() {
     override fun toString(): String {
         return item.toString()
     }
 
-    fun asList(): ListItem {
+  fun asList(): ListItem {
         return ListItem(listOf(this))
     }
 }
 
-data class ListItem(val list: List<Item>) : Item() {
+private data class ListItem(val list: List<Item>) : Item() {
     override fun toString(): String {
         return list.toString().replace(" ", "")
     }

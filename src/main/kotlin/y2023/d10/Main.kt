@@ -3,7 +3,7 @@ package y2023.d10
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d10/Input-test.txt"
         "src/main/kotlin/y2023/d10/Input.txt"
@@ -27,7 +27,7 @@ fun main() {
     } ms")
 }
 
-enum class Pipe {
+private enum class Pipe {
     S {
         override fun connectableDirections() = listOf(Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST)
         override fun toString() = "S"
@@ -64,8 +64,8 @@ enum class Pipe {
     abstract fun connectableDirections(): List<Direction>
 }
 
-data class Position(val row: Int, val column: Int) {
-    fun move(direction: Direction) = when (direction) {
+private data class Position(val row: Int, val column: Int) {
+  fun move(direction: Direction) = when (direction) {
         Direction.NORTH -> Position(row - 1, column)
         Direction.SOUTH -> Position(row + 1, column)
         Direction.WEST -> Position(row, column - 1)
@@ -75,23 +75,23 @@ data class Position(val row: Int, val column: Int) {
 
 }
 
-enum class Direction { NORTH, SOUTH, WEST, EAST }
+private enum class Direction { NORTH, SOUTH, WEST, EAST }
 
-fun List<List<Pipe>>.next(currentPosition: Position, direction: Direction): Pipe? {
+private fun List<List<Pipe>>.next(currentPosition: Position, direction: Direction): Pipe? {
     val nextPosition = currentPosition.move(direction)
     return if (nextPosition.row < 0 || nextPosition.column < 0 || nextPosition.row >= this.size || nextPosition.column >= this[0].size) null
     else this[nextPosition.row][nextPosition.column]
 }
 
-fun List<List<Pipe>>.get(position: Position): Pipe {
+private fun List<List<Pipe>>.get(position: Position): Pipe {
     return this[position.row][position.column]
 }
 
-fun Array<Array<Pipe>>.get(position: Position): Pipe {
+private fun Array<Array<Pipe>>.get(position: Position): Pipe {
     return this[position.row][position.column]
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     var currentPosition = Position(0, 0)
     val grid = input.lines().mapIndexed { row, line ->
         val chars = line.toCharArray().map {
@@ -149,7 +149,7 @@ fun part1(input: String): Int {
     return step / 2
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     var currentPosition = Position(0, 0)
     val grid = input.lines().mapIndexed { row, line ->
         val chars = line.toCharArray().map {

@@ -2,7 +2,7 @@ package y2022.d17
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val shapes = File("src/main/kotlin/y2022/d17/Shapes.txt").readText(Charsets.UTF_8).split("\n\n").map { block ->
         List(4) { y ->
             List(4) { x ->
@@ -31,7 +31,7 @@ fun main() {
     println(part2(input, shapes))
 }
 
-fun part2(input: String, shapes: List<List<List<Boolean>>>): Long {
+private fun part2(input: String, shapes: List<List<List<Boolean>>>): Long {
     val rockLimit = 1000000000000L
     val grid = MutableList(5) { MutableList(7) { '.' } }
 
@@ -93,7 +93,7 @@ fun part2(input: String, shapes: List<List<List<Boolean>>>): Long {
     return offsetY.plus(highestGround)
 }
 
-fun part1(input: String, shapes: List<List<List<Boolean>>>): Int {
+private fun part1(input: String, shapes: List<List<List<Boolean>>>): Int {
     val rockLimit = 2022
     val grid = MutableList(5) { MutableList(7) { '.' } }
 
@@ -133,7 +133,7 @@ fun part1(input: String, shapes: List<List<List<Boolean>>>): Int {
     return highestGround
 }
 
-fun isPossible(grid: List<List<Char>>, shape: List<List<Boolean>>, shapeX: Int, shapeY: Int): Boolean {
+private fun isPossible(grid: List<List<Char>>, shape: List<List<Boolean>>, shapeX: Int, shapeY: Int): Boolean {
     shape.forEachIndexed { y, row ->
         row.forEachIndexed { x, b ->
             if (b) {

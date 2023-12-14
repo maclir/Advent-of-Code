@@ -2,14 +2,14 @@ package y2022.d21
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d21/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d21/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Long {
+private fun part2(input: String): Long {
     val operationsRaw =
         input.lines().map { line -> line.split(" ") }.filter { parts -> parts[0] != "humn:" }.associate { parts ->
             parts[0].dropLast(1) to (if (parts[0] != "root:") parts.drop(1) else parts.drop(1)
@@ -76,7 +76,7 @@ fun part2(input: String): Long {
     return variables["humn"]!!
 }
 
-fun part1(input: String): Long {
+private fun part1(input: String): Long {
     val operations = input.lines().map { line -> line.split(" ") }.associate { parts ->
         parts[0].dropLast(1) to parts.drop(1)
     }.toMutableMap()

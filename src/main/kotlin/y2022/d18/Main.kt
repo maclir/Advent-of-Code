@@ -2,14 +2,14 @@ package y2022.d18
 
 import java.io.File
 
-fun main() {
+private fun main() {
 //    val input = File("src/main/kotlin/y2022/d18/Input.txt").readText(Charsets.UTF_8)
     val input = File("src/main/kotlin/y2022/d18/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val cubes = input.lines().map { line ->
         val (x, y, z) = Regex("[0-9]+").findAll(line).map(MatchResult::value).map { it.toInt() }.toList()
         Cube(x, y, z)
@@ -56,7 +56,7 @@ fun part2(input: String): Int {
     return surface
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val cubes = input.lines().map { line ->
         val (x, y, z) = Regex("[0-9]+").findAll(line).map(MatchResult::value).map { it.toInt() }.toList()
         Cube(x, y, z)
@@ -71,8 +71,8 @@ fun part1(input: String): Int {
     return surface
 }
 
-data class Cube(val x: Int, val y: Int, val z: Int) {
-    fun adjacentCubes(): List<Cube> {
+private data class Cube(val x: Int, val y: Int, val z: Int) {
+  fun adjacentCubes(): List<Cube> {
         return listOf(
             Cube(x + 1, y, z),
             Cube(x - 1, y, z),

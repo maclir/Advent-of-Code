@@ -3,7 +3,7 @@ package y2022.d25
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2022/d25/Input-test.txt"
         "src/main/kotlin/y2022/d25/Input.txt"
@@ -20,17 +20,17 @@ fun main() {
 }
 
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     return -1
 }
 
-fun part1(input: String): String {
+private fun part1(input: String): String {
     return input.lines().sumOf {
         it.customBaseToInt()
     }.customBase()
 }
 
-fun Long.customBase(): String {
+private fun Long.customBase(): String {
     var carry = false
     return this.toString(5).reversed().map {
         val char = if (carry) {
@@ -65,7 +65,7 @@ fun Long.customBase(): String {
 }
 
 
-fun String.customBaseToInt(): Long {
+private fun String.customBaseToInt(): Long {
     var carry = false
     return reversed().map {
         if (carry) {

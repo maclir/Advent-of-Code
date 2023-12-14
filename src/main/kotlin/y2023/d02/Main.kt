@@ -3,7 +3,7 @@ package y2023.d02
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d02/Input-test.txt"
         "src/main/kotlin/y2023/d02/Input.txt"
@@ -21,7 +21,7 @@ fun main() {
 }
 
 // only 12 red cubes, 13 green cubes, and 14 blue cubes
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     return input.lines().sumOf { line ->
         val id = Regex("([0-9]+):").find(line)?.groupValues?.get(1)?.toInt() ?: 0
         val rawBuckets = Regex("([0-9]+ [a-z]+)").findAll(line).map(MatchResult::value)
@@ -36,7 +36,7 @@ fun part1(input: String): Int {
     }
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     return input.lines().sumOf { line ->
         val id = Regex("([0-9]+):").find(line)?.groupValues?.get(1)?.toInt() ?: 0
         val rawBuckets = Regex("([0-9]+ [a-z]+)").findAll(line).map(MatchResult::value)

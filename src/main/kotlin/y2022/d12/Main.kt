@@ -2,14 +2,14 @@ package y2022.d12
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d12/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d12/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     var eRow = 0
     var eCol = 0
     var eFound = false
@@ -47,7 +47,7 @@ fun part2(input: String): Int {
     return minDistance
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     var sRow = 0
     var sCol = 0
     var sFound = false
@@ -91,7 +91,7 @@ val dirs = listOf(
     { r: Int, c: Int -> r to c - 1 },
 )
 
-fun populateMinSteps(
+private fun populateMinSteps(
     grid: List<List<Char>>,
     distanceGrid: List<MutableList<Int?>>,
     row: Int,

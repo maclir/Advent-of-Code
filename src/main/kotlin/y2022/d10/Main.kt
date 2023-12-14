@@ -3,14 +3,14 @@ package y2022.d10
 import java.io.File
 import kotlin.math.abs
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d10/Input.txt").readLines(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d10/Input-test.txt").readLines(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     var lineCounter = 0
     var registerX = 1
     val screen = Array(6) { CharArray(40) }
@@ -45,7 +45,7 @@ fun part2(input: List<String>): Int {
     return 0
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     var lineCounter = 0
     var registerX = 1
     val signals = mutableMapOf<Int, Int>()

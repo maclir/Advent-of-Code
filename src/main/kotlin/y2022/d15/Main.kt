@@ -3,14 +3,14 @@ package y2022.d15
 import java.io.File
 import kotlin.math.abs
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d15/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d15/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
 //    val upperBound = 20
     val upperBound = 4000000
     val numbers = input.lines().map { line ->
@@ -45,7 +45,7 @@ fun part2(input: String): Int {
     return -1
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val yToCheck = 2000000
 //    val yToCheck = 10
 

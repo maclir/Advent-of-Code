@@ -2,14 +2,14 @@ package y2022.d20
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d20/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d20/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Long {
+private fun part2(input: String): Long {
     val numbers = input.lines().map { line -> line.toLong() * 811589153}.mapIndexed{index, number ->
         index to number
     }.toMutableList()
@@ -36,7 +36,7 @@ fun part2(input: String): Long {
     }
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val numbers = input.lines().map { line -> line.toInt() }.mapIndexed{index, number ->
         index to number
     }.toMutableList()

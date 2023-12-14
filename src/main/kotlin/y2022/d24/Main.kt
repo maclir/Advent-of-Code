@@ -4,7 +4,7 @@ import leastCommonMultiple
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2022/d24/Input-test.txt"
         "src/main/kotlin/y2022/d24/Input.txt"
@@ -21,7 +21,7 @@ fun main() {
 }
 
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val allWinds = mutableListOf<Wind>()
     val grid = input.lines().map { line ->
         line.toCharArray().map<MutableList<Wind>?> {
@@ -78,7 +78,7 @@ fun part2(input: String): Int {
     return getMinimumSteps(windCache, windRepeatCycle, startRow, startColumn, endRow, endColumn, step)
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val allWinds = mutableListOf<Wind>()
     val grid = input.lines().map { line ->
         line.toCharArray().map<MutableList<Wind>?> {
@@ -133,7 +133,7 @@ fun part1(input: String): Int {
     return getMinimumSteps(windCache, windRepeatCycle, startRow, startColumn, endRow, endColumn)
 }
 
-fun getMinimumSteps(
+private fun getMinimumSteps(
     windCache: Map<Int, List<List<List<Wind>?>>>,
     windRepeatCycle: Int,
     startRow: Int,
@@ -172,7 +172,7 @@ fun getMinimumSteps(
 }
 
 
-fun moveWinds(grid: List<List<MutableList<Wind>?>>, row: Int, column: Int) {
+private fun moveWinds(grid: List<List<MutableList<Wind>?>>, row: Int, column: Int) {
     val winds = grid[row][column] ?: return
     winds.removeIf { wind ->
         if (wind.moved) return@removeIf false
@@ -194,12 +194,12 @@ fun moveWinds(grid: List<List<MutableList<Wind>?>>, row: Int, column: Int) {
     }
 }
 
-data class Wind(
+private data class Wind(
     val direction: Direction,
     var moved: Boolean = false,
 )
 
-enum class Direction {
+private enum class Direction {
     UP {
         override fun getNewPosition(row: Int, column: Int, rowStep: Int, columnStep: Int) = row - rowStep to column
         override fun opposite() = DOWN

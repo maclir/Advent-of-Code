@@ -4,7 +4,7 @@ import java.io.File
 import kotlin.system.measureTimeMillis
 import kotlin.time.times
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d06/Input-test.txt"
         "src/main/kotlin/y2023/d06/Input.txt"
@@ -21,9 +21,9 @@ fun main() {
     } ms")
 }
 
-data class Race(val time: Int, val distance: Int)
+private data class Race(val time: Int, val distance: Int)
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val races = Regex("[0-9]+").findAll(input.lines()[0]).map(MatchResult::value).map { it.toInt() }.zip(
         Regex("[0-9]+").findAll(input.lines()[1]).map(MatchResult::value).map { it.toInt() }
     ).map { Race(it.first, it.second) }
@@ -41,9 +41,9 @@ fun part1(input: String): Int {
     return result
 }
 
-data class LongRace(val time: Long, val distance: Long)
+private data class LongRace(val time: Long, val distance: Long)
 
-fun part2(input: String): Long {
+private fun part2(input: String): Long {
     val race = LongRace(
         Regex("[0-9]+").findAll(input.lines()[0].replace(" ", "")).map(MatchResult::value).map { it.toLong() }.first(),
         Regex("[0-9]+").findAll(input.lines()[1].replace(" ", "")).map(MatchResult::value).map { it.toLong() }.first()

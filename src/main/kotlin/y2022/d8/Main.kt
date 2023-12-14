@@ -2,14 +2,14 @@ package y2022.d8
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d8/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d8/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val lines = input.lines()
 
     val treesH = Array(lines.size) { IntArray(lines.size) }
@@ -27,7 +27,7 @@ fun part2(input: String): Int {
         val left: Int,
         val right: Int,
     ) {
-        fun score() = top * bottom * left * right
+      fun score() = top * bottom * left * right
     }
 
     val trees = mutableListOf<Tree>()
@@ -69,7 +69,7 @@ fun part2(input: String): Int {
     return trees.maxBy { it.score() }.score()
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val lines = input.lines()
 
     val trees = Array(lines.size) { IntArray(lines.size) }

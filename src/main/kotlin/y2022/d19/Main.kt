@@ -2,14 +2,14 @@ package y2022.d19
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d19/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d19/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val blueprints = input.lines().map { line ->
         line.dropLast(1).split(".").mapIndexed { index, subLine ->
             val botCostInput =
@@ -50,7 +50,7 @@ fun part2(input: String): Int {
     return sum
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val blueprints = input.lines().map { line ->
         line.dropLast(1).split(".").mapIndexed { index, subLine ->
             val botCostInput =
@@ -92,7 +92,7 @@ fun part1(input: String): Int {
 
 val cache = mutableMapOf<String, Int>()
 
-fun findMaxGeodes(
+private fun findMaxGeodes(
     minutesLeft: Int,
     depot: Depot,
     blueprint: List<BotCost>,
@@ -122,7 +122,7 @@ fun findMaxGeodes(
     return max
 }
 
-data class Depot(
+private data class Depot(
     var ore: Int = 0,
     var clay: Int = 0,
     var obsidian: Int = 0,
@@ -130,7 +130,7 @@ data class Depot(
     val bots: MutableMap<String, Int> = mutableMapOf("ore" to 1),
     var inProduction: String? = null,
 ) {
-    fun build(botCost: BotCost): Depot? {
+  fun build(botCost: BotCost): Depot? {
         val newOre = ore - botCost.ore
         val newClay = clay - botCost.clay
         val newObsidian = obsidian - botCost.obsidian
@@ -145,7 +145,7 @@ data class Depot(
         )
     }
 
-    fun produceAll() {
+  fun produceAll() {
         bots.forEach { (botName, quantity) ->
             when (botName) {
                 "ore" -> ore += quantity
@@ -165,7 +165,7 @@ data class Depot(
     }
 }
 
-data class BotCost(
+private data class BotCost(
     val name: String?,
     val ore: Int = 0,
     val clay: Int = 0,

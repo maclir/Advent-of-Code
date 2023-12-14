@@ -2,7 +2,7 @@ package y2022.d22
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d22/Input-fixed.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d22/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d22/Input-test.txt").readText(Charsets.UTF_8)
@@ -11,7 +11,7 @@ fun main() {
 //    fixPart2Cube(input)
 }
 
-fun fixPart2Cube(input: String) {
+private fun fixPart2Cube(input: String) {
     val face = input.lines().map { line -> line.toCharArray().toMutableList() }.toMutableList()
     for (x in 0..49) {
         println()
@@ -21,7 +21,7 @@ fun fixPart2Cube(input: String) {
     }
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val gridText = input.split("\n\n")[0].lines().toMutableList()
     gridText.add(0, " ")
     gridText.add(" ")
@@ -84,7 +84,7 @@ fun part2(input: String): Int {
     return 1000 * currentRow + 4 * currentColumn + directionValue
 }
 
-fun moveCube(grid: List<MutableList<Char>>, direction: Char, row: Int, column: Int): Triple<Char, Int, Int> {
+private fun moveCube(grid: List<MutableList<Char>>, direction: Char, row: Int, column: Int): Triple<Char, Int, Int> {
     var newDirection = direction
     val cubeDimensionSize = (grid.size - 2) / 3
     var (newRow, newColumn) = move(direction, row, column)
@@ -243,7 +243,7 @@ fun moveCube(grid: List<MutableList<Char>>, direction: Char, row: Int, column: I
     return Triple(newDirection, newRow, newColumn)
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val gridText = input.split("\n\n")[0].lines().toMutableList()
     gridText.add(0, " ")
     gridText.add(" ")
@@ -317,7 +317,7 @@ fun part1(input: String): Int {
     return 1000 * currentRow + 4 * currentColumn + directionValue
 }
 
-fun move(direction: Char, row: Int, column: Int) = when (direction) {
+private fun move(direction: Char, row: Int, column: Int) = when (direction) {
     '>' -> row to column + 1
     '<' -> row to column - 1
     'v' -> row + 1 to column
@@ -327,5 +327,5 @@ fun move(direction: Char, row: Int, column: Int) = when (direction) {
 
 
 sealed class Instruction
-data class Walk(val steps: Int) : Instruction()
-data class Turn(val direction: Char) : Instruction()
+private data class Walk(val steps: Int) : Instruction()
+private data class Turn(val direction: Char) : Instruction()

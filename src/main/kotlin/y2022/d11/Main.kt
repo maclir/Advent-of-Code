@@ -4,21 +4,21 @@ import java.io.File
 import java.math.BigInteger
 import kotlin.math.abs
 
-data class Monkey(
+private data class Monkey(
     val items: MutableList<BigInteger>,
     val operation: (old: BigInteger) -> BigInteger,
     val test: (stress: BigInteger) -> Int,
     var inspectCounter: Int = 0,
 )
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d11/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d11/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Long {
+private fun part2(input: String): Long {
     val zeroBigInt = 0.toBigInteger()
     var masterDivide = 1.toBigInteger()
     val monkeys = mutableListOf<Monkey>()
@@ -116,7 +116,7 @@ fun part2(input: String): Long {
     return total
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val monkeys = mutableListOf<Monkey>()
     input.split("\n\n").map { lines ->
         val items =

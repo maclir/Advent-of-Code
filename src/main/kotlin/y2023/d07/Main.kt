@@ -4,7 +4,7 @@ import java.io.File
 import kotlin.system.measureTimeMillis
 import kotlin.time.times
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d07/Input-test.txt"
         "src/main/kotlin/y2023/d07/Input.txt"
@@ -21,10 +21,10 @@ fun main() {
     } ms")
 }
 
-enum class Type {HIGH, PAIR, TWO_PAIR, THREE, FULL, FOUR, FIVE}
-data class Round(val cards: List<Int>, val type: Type, val bid: Int)
+private enum class Type {HIGH, PAIR, TWO_PAIR, THREE, FULL, FOUR, FIVE}
+private data class Round(val cards: List<Int>, val type: Type, val bid: Int)
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val game = input.lines().map { line ->
         val (cardsRaw, bid) = line.split(" ")
         val cards = cardsRaw.map {
@@ -95,7 +95,7 @@ fun part1(input: String): Int {
 }
 
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val game = input.lines().map { line ->
         val (cardsRaw, bid) = line.split(" ")
         val cards = cardsRaw.map {

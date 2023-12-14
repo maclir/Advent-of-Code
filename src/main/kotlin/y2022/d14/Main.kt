@@ -2,14 +2,14 @@ package y2022.d14
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d14/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d14/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     var floor = 0
     val widthAdjust = 120
     input.split("\n").forEach { line ->
@@ -84,7 +84,7 @@ fun part2(input: String): Int {
     return count
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val widthAdjust = -480
     val map = List(170) { MutableList(550 + widthAdjust) { '.' } }
     input.split("\n").forEach { line ->
@@ -149,7 +149,7 @@ fun part1(input: String): Int {
     return count
 }
 
-fun loopUnknownDir(a: Int, b: Int, f: (i: Int) -> Unit) {
+private fun loopUnknownDir(a: Int, b: Int, f: (i: Int) -> Unit) {
     if (a < b) {
         for (i in a..b) {
             f(i)

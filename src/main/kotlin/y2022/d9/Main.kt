@@ -3,14 +3,14 @@ package y2022.d9
 import java.io.File
 import kotlin.math.abs
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d9/Input.txt").readLines(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d9/Input-test.txt").readLines(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val visited = mutableSetOf<String>()
 
     val x = MutableList(10) { 0 }
@@ -56,7 +56,7 @@ fun part2(input: List<String>): Int {
     return visited.size
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val visited = mutableSetOf<String>()
 
     var (tX, tY, hX, hY) = List(4) { 0 }

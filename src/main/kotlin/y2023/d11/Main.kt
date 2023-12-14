@@ -7,7 +7,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d11/Input-test.txt"
         "src/main/kotlin/y2023/d11/Input.txt"
@@ -31,9 +31,9 @@ fun main() {
     } ms")
 }
 
-data class Position(val row: Int, val column: Int)
+private data class Position(val row: Int, val column: Int)
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val map = input.lines().map {line ->
         line.toCharArray().toMutableList()
     }.toMutableList()
@@ -84,7 +84,7 @@ fun part1(input: String): Int {
     return sum
 }
 
-fun part2(input: String): Long {
+private fun part2(input: String): Long {
     val map = input.lines().map {line ->
         line.toCharArray().toMutableList()
     }.toMutableList()

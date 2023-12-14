@@ -3,7 +3,7 @@ package y2023.d05
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d05/Input-test.txt"
         "src/main/kotlin/y2023/d05/Input.txt"
@@ -20,12 +20,12 @@ fun main() {
     } ms")
 }
 
-data class Almanac(val destination: Long, val source: Long, val range: Long) {
-    fun inRange(s: Long) = s >= source && s < source + range
-    fun translate(s: Long) = (s - source) + destination
+private data class Almanac(val destination: Long, val source: Long, val range: Long) {
+  fun inRange(s: Long) = s >= source && s < source + range
+  fun translate(s: Long) = (s - source) + destination
 }
 
-fun part1(input: String): Long {
+private fun part1(input: String): Long {
     val seeds = mutableListOf<Long>()
     val dict = mutableListOf<List<Almanac>>()
     input.split("\n\n").forEach { section ->
@@ -61,9 +61,9 @@ fun part1(input: String): Long {
     }
 }
 
-data class Seed(val start: Long, val range: Long)
+private data class Seed(val start: Long, val range: Long)
 
-fun part2(input: String): Long {
+private fun part2(input: String): Long {
     val seeds = mutableListOf<Seed>()
     val dict = mutableListOf<List<Almanac>>()
     input.split("\n\n").forEach { section ->

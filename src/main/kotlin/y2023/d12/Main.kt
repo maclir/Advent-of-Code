@@ -3,7 +3,7 @@ package y2023.d12
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d12/Input-test.txt"
         "src/main/kotlin/y2023/d12/Input.txt"
@@ -27,7 +27,7 @@ fun main() {
     } ms")
 }
 
-data class Line(val line: String, val damageCounts: List<Int>)
+private data class Line(val line: String, val damageCounts: List<Int>)
 
 private fun String.matchesWithPlaceholder(otherLine: String): Boolean {
     for (index in this.indices) {
@@ -39,7 +39,7 @@ private fun String.matchesWithPlaceholder(otherLine: String): Boolean {
 private fun Line.getPossibleLinesCount(): Long {
     val cache = mutableMapOf<Pair<Int, Int>, Long>()
 
-    fun dive(diveLine: Line, startIndex: Int): Long {
+  fun dive(diveLine: Line, startIndex: Int): Long {
         val cacheKey = Pair(startIndex, diveLine.damageCounts.size)
         val cachedResult = cache[cacheKey]
         if (cachedResult != null) {
@@ -89,7 +89,7 @@ private fun Line.getPossibleLinesCount(): Long {
 }
 
 
-fun part1(input: String): Long {
+private fun part1(input: String): Long {
     return input.lines().map { line ->
         val (springs, damageCounts) = line.split(" ")
         Line(springs, damageCounts.split(",").map { it.toInt() })
@@ -98,7 +98,7 @@ fun part1(input: String): Long {
     }
 }
 
-fun part2(input: String): Long {
+private fun part2(input: String): Long {
     return input.lines().map { line ->
         val (springs, damageCounts) = line.split(" ")
         val unfoldedDamageCounts = List(5) { damageCounts }.joinToString(",")

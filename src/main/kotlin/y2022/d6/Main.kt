@@ -2,7 +2,7 @@ package y2022.d6
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val inputL = File("src/main/kotlin/y2022/d6/Input.txt").readText(Charsets.UTF_8).split("").toMutableList()
     inputL.removeFirst()
     for (i in 13..inputL.size-1) {

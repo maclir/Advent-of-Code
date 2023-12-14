@@ -2,7 +2,7 @@ package y2022.d23
 
 import java.io.File
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d23/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d23/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
@@ -10,7 +10,7 @@ fun main() {
 }
 
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val lineLength = input.lines()[0].length
     val padLength = 100
     val padStart = lineLength + padLength
@@ -71,7 +71,7 @@ fun part2(input: String): Int {
     return roundCounter
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val lineLength = input.lines()[0].length
     val padLength = 10
     val padStart = lineLength + padLength
@@ -134,11 +134,11 @@ fun part1(input: String): Int {
     }
 }
 
-data class Elf(
+private data class Elf(
     var row: Int,
     var column: Int,
 ) {
-    fun adjacentPositions() = listOf(
+  fun adjacentPositions() = listOf(
         row to column + 1,
         row to column - 1,
         row + 1 to column,
@@ -150,7 +150,7 @@ data class Elf(
     )
 }
 
-enum class Direction {
+private enum class Direction {
     NORTH {
         override fun proposeMove(
             grid: List<List<Pair<Elf?, List<Elf>>>>, elfRow: Int, elfColumn: Int

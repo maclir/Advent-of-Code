@@ -3,7 +3,7 @@ package y2023.d14
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d14/Input-test.txt"
         "src/main/kotlin/y2023/d14/Input.txt"
@@ -27,7 +27,7 @@ fun main() {
     } ms")
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val map = input.lines().map { it.toCharArray().toMutableList() }
     val lowestRows = MutableList(map[0].size) { -1 }
 
@@ -57,7 +57,7 @@ fun part1(input: String): Int {
     }
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val map = input.lines().map { it.toCharArray().toMutableList() }
 
     val snapshots = mutableMapOf<List<List<Char>>, Int>()

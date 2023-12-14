@@ -2,7 +2,7 @@ package y2022.d7
 
 import java.io.File
 
-data class Directory(
+private data class Directory(
     val parent: Directory?,
     val name: String,
     var size: Int = 0,
@@ -10,13 +10,13 @@ data class Directory(
     val childrenFiles: MutableMap<String, Int>,
 )
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d7/Input.txt").readLines(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val dirs = mutableMapOf<String, Directory>()
 
     lateinit var root: Directory
@@ -69,7 +69,7 @@ fun part2(input: List<String>): Int {
     return dirs.filter { it.value.size >= need }.minOf { it.value.size }
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val dirs = mutableMapOf<String, Directory>()
 
     lateinit var root: Directory
@@ -118,7 +118,7 @@ fun part1(input: List<String>): Int {
     return dirs.filter { it.value.size <= 100000 }.values.sumOf { it.size }
 }
 
-fun fixSizes(root: Directory): Int {
+private fun fixSizes(root: Directory): Int {
     var size = root.childrenFiles.values.sum()
     root.childrenDirs.forEach {
         size += fixSizes(it.value)

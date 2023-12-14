@@ -4,7 +4,7 @@ import java.io.File
 import kotlin.system.measureTimeMillis
 import kotlin.time.times
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d09/Input-test.txt"
         "src/main/kotlin/y2023/d09/Input.txt"
@@ -21,7 +21,7 @@ fun main() {
     } ms")
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val lines = input.lines().map { line ->
         line.split(" ").map { it.toInt() }
     }
@@ -49,7 +49,7 @@ fun part1(input: String): Int {
     }
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val lines = input.lines().map { line ->
         line.split(" ").map { it.toInt() }
     }

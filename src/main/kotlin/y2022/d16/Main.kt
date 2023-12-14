@@ -4,14 +4,14 @@ import java.io.File
 import kotlin.math.abs
 import kotlin.math.min
 
-fun main() {
+private fun main() {
     val input = File("src/main/kotlin/y2022/d16/Input.txt").readText(Charsets.UTF_8)
 //    val input = File("src/main/kotlin/y2022/d16/Input-test.txt").readText(Charsets.UTF_8)
 //    println(part1(input))
     println(part2(input))
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val all = mutableMapOf<String, Valve>()
     input.lines().forEach { line ->
         val rate = Regex("[0-9]+").findAll(line).map(MatchResult::value).map { it.toInt() }.first()
@@ -37,7 +37,7 @@ fun part2(input: String): Int {
     return max
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val all = mutableMapOf<String, Valve>()
     input.lines().forEach { line ->
         val rate = Regex("[0-9]+").findAll(line).map(MatchResult::value).map { it.toInt() }.first()
@@ -56,7 +56,7 @@ fun part1(input: String): Int {
 }
 
 val cache = mutableMapOf<String, Int>()
-fun calculateEnergy(minutesLeft: Int, current: String, all: Map<String, Valve>, valvesLeft: MutableSet<String>): Int {
+private fun calculateEnergy(minutesLeft: Int, current: String, all: Map<String, Valve>, valvesLeft: MutableSet<String>): Int {
     if (minutesLeft <= 0 || valvesLeft.isEmpty()) return 0
     val cacheValue = cache["$minutesLeft|$current|$valvesLeft"]
     if (cacheValue != null) return cacheValue
@@ -77,7 +77,7 @@ fun calculateEnergy(minutesLeft: Int, current: String, all: Map<String, Valve>, 
     return result
 }
 
-fun getDistance(all: MutableMap<String, Valve>, name: String, oName: String, skipParents: MutableSet<String>): Int {
+private fun getDistance(all: MutableMap<String, Valve>, name: String, oName: String, skipParents: MutableSet<String>): Int {
     val newSkipFriends = skipParents.toMutableSet()
     return if (all[name]!!.children.contains(oName)) 1
     else {
@@ -89,7 +89,7 @@ fun getDistance(all: MutableMap<String, Valve>, name: String, oName: String, ski
     }
 }
 
-data class Valve(
+private data class Valve(
     val name: String,
     val rate: Int,
     val children: List<String>,

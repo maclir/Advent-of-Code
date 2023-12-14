@@ -3,7 +3,7 @@ package y2023.d03
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d03/Input-test.txt"
         "src/main/kotlin/y2023/d03/Input.txt"
@@ -20,7 +20,7 @@ fun main() {
     } ms")
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val grid = input.split("\n").map { line ->
         line.toCharArray().toList()
     }
@@ -58,7 +58,7 @@ fun part1(input: String): Int {
     return sum
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val grid = input.split("\n").map { line ->
         line.toCharArray().toList()
     }
@@ -94,7 +94,7 @@ fun part2(input: String): Int {
         for (col in newGrid[0].indices) {
             if (grid[row][col] == '*') {
                 val numbers = arrayListOf<Int>()
-                fun addNumbers(number: Int?): Boolean {
+              fun addNumbers(number: Int?): Boolean {
                     if (number != null) numbers.add(number)
                     return number != null
                 }

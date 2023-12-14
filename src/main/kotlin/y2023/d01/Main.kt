@@ -3,7 +3,7 @@ package y2023.d01
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-fun main() {
+private fun main() {
     val input = File(
 //        "src/main/kotlin/y2023/d01/Input-test.txt"
         "src/main/kotlin/y2023/d01/Input.txt"
@@ -20,14 +20,14 @@ fun main() {
     } ms")
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     return input.lines().sumOf { line ->
         Regex("([0-9])").findAll(line).map(MatchResult::value).map { it.toInt() }.first() * 10 +
                 Regex("([0-9])").findAll(line).map(MatchResult::value).map { it.toInt() }.last()
     }
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     val newInput = input
         .replace("one", "o1e")
         .replace("two", "t2")
