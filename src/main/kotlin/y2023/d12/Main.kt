@@ -5,8 +5,8 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     val input = File(
-//        "src/main/kotlin/y2023/d12/Input-test.txt"
-        "src/main/kotlin/y2023/d12/Input.txt"
+        "src/main/kotlin/y2023/d12/Input-test.txt"
+//        "src/main/kotlin/y2023/d12/Input.txt"
     ).readText(Charsets.UTF_8)
 
     println("${
@@ -27,97 +27,71 @@ fun main() {
     } ms")
 }
 
-//private val cache = mutableSetOf<String>()
-data class InnerLine(val line: String)  {
-    override fun equals(other: Any?): Boolean {
-        if (other !is InnerLine) return false
-//        if (cache.contains("$line|${other.line}")) return true
-        for (index in line.indices) {
-            if (line[index] != '?' && other.line[index] != '?' && line[index] != other.line[index]) return false
-        }
-//        cache.add("$line|${other.line}")
-//        cache.add("${other.line}|$line")
-        return true
-    }
+data class Line(val line: String, val damageCounts: List<Int>)
 
-    override fun hashCode(): Int {
-        return line.hashCode()
-    }
-
+private fun String.matchesWithPlaceholder(otherLine: String): Boolean {
+    for (index in this.indices) {
+        if (this[index] != '?' && otherLine[index] != '?' && this[index] != otherLine[index]) return false
+     }
+    return true
 }
-data class Line(val line: InnerLine, val damageCounts: List<Int>)
-
-private fun Line.getPossibleLinesCount(): Int {
-    var allPossibleCount = 0
-
-    fun dive(diveLine: InnerLine, diveDamageCounts: List<Int>, startIndex: Int) {
-        if (startIndex + diveDamageCounts.sum() + diveDamageCounts.count() - 1 > diveLine.line.length) return
-        if (InnerLine(diveLine.line.substring(0, startIndex)) != InnerLine(line.line.substring(0, startIndex))) return
-        if (InnerLine(diveLine.line.substring(startIndex, diveLine.line.length).replace('.', '?')) != InnerLine(line.line.substring(startIndex, diveLine.line.length))) {
-            return
-        }
-        if (diveDamageCounts.sum() + diveDamageCounts.count() - 1 < line.line.substring(startIndex, diveLine.line.length).count { it == '#' }) {
-            return
-        }
-
-        val endIndex = startIndex + diveDamageCounts.first()
-        val newDiveLine =
-            InnerLine(diveLine.line.replaceRange(startIndex, endIndex, CharArray(diveDamageCounts.first()) { '#' }.joinToString("")))
-
-        if (diveDamageCounts.size > 1) {
-            dive(newDiveLine, diveDamageCounts.drop(1), endIndex + 1)
-        } else {
-            if (line == newDiveLine) allPossibleCount++
-        }
-        dive(diveLine, diveDamageCounts, startIndex + 1)
-    }
-
-    dive(InnerLine(CharArray(line.line.length) { '.' }.joinToString("")), damageCounts, 0)
-    return allPossibleCount
-}
-
 
 private fun Line.getPossibleLinesCount2(): Int {
-    val cache = mutableMapOf<Pair<String, List<Int>>, Int>()
-    fun dive(diveLine: InnerLine, diveDamageCounts: List<Int>, startIndex: Int): Int {
-        val key = Pair(diveLine.line, diveDamageCounts)
-        if (cache.containsKey(key)) {
-            println("CACHE HIT")
-            return cache[key]!!
+    val cache = mutableMapOf<Pair<String, Int>, Int>()
+
+    fun dive(diveLine: Line, startIndex: Int): Int {
+        val cacheKey = Pair(diveLine.line.substring(startIndex, diveLine.line.length), diveLine.damageCounts.size)
+        val cachedResult = cache[cacheKey]
+        if (cachedResult != null) {
+//            println("$cacheKey: $cachedResult | $diveLine")
+//            return cachedResuclt
         }
 
         var result = 0
 
-        if (startIndex + diveDamageCounts.sum() + diveDamageCounts.count() - 1 <= diveLine.line.length &&
-            InnerLine(diveLine.line.substring(0, startIndex)) == InnerLine(line.line.substring(0, startIndex)) &&
-            InnerLine(diveLine.line.substring(startIndex, diveLine.line.length).replace('.', '?')) == InnerLine(line.line.substring(startIndex, diveLine.line.length))
-        ) {
-            val endIndex = startIndex + diveDamageCounts.first()
-            val newDiveLine =
-                InnerLine(diveLine.line.replaceRange(startIndex, endIndex, CharArray(diveDamageCounts.first()) { '#' }.joinToString("")))
-
-            if (diveDamageCounts.size > 1) {
-                result += dive(newDiveLine, diveDamageCounts.drop(1), endIndex + 1)
-            } else {
-                if (line == newDiveLine) result++
-            }
-            result += dive(diveLine, diveDamageCounts, startIndex + 1)
+        val replacement = if (diveLine.damageCounts.size == 1 && startIndex + diveLine.damageCounts.first() == line.length) {
+            CharArray(diveLine.damageCounts.first()) { '#' }.joinToString("")
+        } else {
+            CharArray(diveLine.damageCounts.first()) { '#' }.joinToString("") + '.'
         }
 
-        cache[key] = result
-        println("Cache Key: $key, Cache Contents: $result")
+        val endIndex = startIndex + replacement.length
+        if (endIndex <= line.length) {
+            val newLine = diveLine.line.replaceRange(
+                startIndex,
+                endIndex,
+                replacement
+            )
+
+            if (newLine.matchesWithPlaceholder(line) && newLine.count { it == '#' } <= damageCounts.sum()) {
+                val newDiveLine = Line(newLine, diveLine.damageCounts.drop(1))
+                if (newDiveLine.damageCounts.isNotEmpty()) {
+                    result += dive(newDiveLine, endIndex)
+                } else {
+                    result++
+                }
+            }
+            result += dive(
+                Line(diveLine.line.replaceRange(startIndex, startIndex + 1, "."), diveLine.damageCounts),
+                startIndex + 1
+            )
+        }
+
+        if (cachedResult != null && cachedResult != result) println("!!!!DIFF $cacheKey: $result != $cachedResult | $diveLine")
+        cache[cacheKey] = result
         return result
     }
 
-    return dive(InnerLine(CharArray(line.line.length) { '.' }.joinToString("")), damageCounts, 0)
+    return dive(this, 0)
 }
+
 
 fun part1(input: String): Int {
     return input.lines().map { line ->
         val (springs, damageCounts) = line.split(" ")
-        Line(InnerLine(springs), damageCounts.split(",").map { it.toInt() })
+        Line(springs, damageCounts.split(",").map { it.toInt() })
     }.sumOf { line ->
-        line.getPossibleLinesCount()
+        line.getPossibleLinesCount2()
     }
 }
 
@@ -125,10 +99,8 @@ fun part2(input: String): Long {
     return input.lines().map { line ->
         val (springs, damageCounts) = line.split(" ")
         val unfoldedDamageCounts = List(5) { damageCounts }.joinToString(",")
-        Line(InnerLine(List(5) { springs }.joinToString("?")), unfoldedDamageCounts.split(",").map { it.toInt() })
+        Line(List(5) { springs }.joinToString("?"), unfoldedDamageCounts.split(",").map { it.toInt() })
     }.sumOf { line ->
-        val count = line.getPossibleLinesCount().toLong()
-        println(count)
-        count
+        line.getPossibleLinesCount2().toLong()
     }
 }
