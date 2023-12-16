@@ -28,7 +28,7 @@ private fun main() {
 }
 
 private fun part1(input: String): Int {
-    val map = input.lines().map { it.toCharArray().toMutableList() }
+    val map = input.lines().map { it.toCharArray().toList() }
     Regex("([0-9]+)[^:]").findAll(input).map { it.groupValues[1] }.map { it.toInt() }.toSet()
     Regex("[0-9]+").findAll(input).map(MatchResult::value).map { it.toInt() }
 
