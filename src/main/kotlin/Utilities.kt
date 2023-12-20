@@ -12,14 +12,20 @@ fun Int.leastCommonMultiple(other: Int): Int {
     return bigger * multiple
 }
 
-fun List<Int>.leastCommonMultiplier(): Int {
-    val max = max()
-    var multiplier = 1
-    while (true) {
-        multiplier++
-        if (all { (max * multiplier) % it == 0 }) break
+fun Long.leastCommonMultiple(other: Long): Long {
+    val smaller = min(this, other)
+    val bigger = max(this, other)
+    var multiple = 1
+    while (bigger * multiple % smaller != 0L) multiple++
+    return bigger * multiple
+}
+
+fun List<Int>.leastCommonMultiple(): Long {
+    var result = this[0].toLong()
+    for (i in 1 until this.size) {
+        result = result.leastCommonMultiple(this[i].toLong())
     }
-    return max * multiplier
+    return result
 }
 
 fun <E> Iterable<E>.indicesOf(e: E) = mapIndexedNotNull { index, elem -> index.takeIf { elem == e } }
