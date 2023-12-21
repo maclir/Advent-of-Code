@@ -29,3 +29,44 @@ fun List<Int>.leastCommonMultiple(): Long {
 }
 
 fun <E> Iterable<E>.indicesOf(e: E) = mapIndexedNotNull { index, elem -> index.takeIf { elem == e } }
+
+enum class Direction {
+    UP {
+        override fun move(current: Node, maxRow: Int, maxCol: Int) =
+            if (current.row - 1 < 0) null else Node(current.row - 1, current.col)
+
+        override fun moveIgnoreBounds(current: Node) = Node(current.row - 1, current.col)
+
+        override fun multiplier() = -1L to 0L
+    },
+    DOWN {
+        override fun move(current: Node, maxRow: Int, maxCol: Int) =
+            if (current.row + 1 > maxRow) null else Node(current.row + 1, current.col)
+
+        override fun moveIgnoreBounds(current: Node) = Node(current.row + 1, current.col)
+
+        override fun multiplier() = 1L to 0L
+    },
+    RIGHT {
+        override fun move(current: Node, maxRow: Int, maxCol: Int) =
+            if (current.col + 1 > maxCol) null else Node(current.row, current.col + 1)
+
+        override fun moveIgnoreBounds(current: Node) = Node(current.row, current.col + 1)
+
+        override fun multiplier() = 0L to 1L
+    },
+    LEFT {
+        override fun move(current: Node, maxRow: Int, maxCol: Int) =
+            if (current.col - 1 < 0) null else Node(current.row, current.col - 1)
+
+        override fun moveIgnoreBounds(current: Node) = Node(current.row, current.col - 1)
+
+        override fun multiplier() = 0L to -1L
+    };
+
+    abstract fun move(current: Node, maxRow: Int, maxCol: Int): Node?
+    abstract fun moveIgnoreBounds(current: Node): Node
+    abstract fun multiplier(): Pair<Long, Long>
+}
+
+data class Node(val row: Int, val col: Int)
