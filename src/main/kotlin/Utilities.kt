@@ -69,4 +69,9 @@ enum class Direction {
     abstract fun multiplier(): Pair<Long, Long>
 }
 
-data class Node(val row: Int, val col: Int)
+data class Node(val row: Int, val col: Int) {
+    var visited: Boolean = false
+    fun move (direction: Direction) = direction.moveIgnoreBounds(this)
+}
+
+fun List<List<Char>>.atNode(node: Node) = this[node.row][node.col]
