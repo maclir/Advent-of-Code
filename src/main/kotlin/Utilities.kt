@@ -71,7 +71,12 @@ enum class Direction {
 
 data class Node(val row: Int, val col: Int) {
     var visited: Boolean = false
-    fun move (direction: Direction) = direction.moveIgnoreBounds(this)
+    fun move(direction: Direction) = direction.moveIgnoreBounds(this)
 }
 
 fun List<List<Char>>.atNode(node: Node) = this[node.row][node.col]
+
+fun <T> List<T>.combinations(size: Int): List<List<T>> = when (size) {
+    0 -> listOf(listOf())
+    else -> flatMapIndexed { idx, element -> drop(idx + 1).combinations(size - 1).map { listOf(element) + it } }
+}
