@@ -32,7 +32,14 @@ private fun main() {
 
 private data class Node2D(val x: Int, val y: Int)
 private data class Node3D(val x: Int, val y: Int, val z: Int)
-private data class Brick(val start: Node3D, val end: Node3D)
+private data class Brick(val start: Node3D, val end: Node3D) {
+    val minX get() = min(start.x, end.x)
+    val minY get() = min(start.y, end.y)
+    val minZ get() = min(start.z, end.z)
+    val maxX get() = max(start.x, end.x)
+    val maxY get() = max(start.y, end.y)
+    val maxZ get() = max(start.z, end.z)
+}
 
 private fun part1(input: String): Int {
     val highestZs = mutableMapOf<Node2D, Int>()
@@ -43,26 +50,24 @@ private fun part1(input: String): Int {
         val (startX, startY, startZ) = start.split(',').map { it.toInt() }
         val (endX, endY, endZ) = end.split(',').map { it.toInt() }
         Brick(Node3D(startX, startY, startZ), Node3D(endX, endY, endZ))
-    }.sortedBy { min(it.start.z, it.end.z) }.map { brick: Brick ->
+    }.sortedBy { it.minZ }.map { brick: Brick ->
         var brickLowestZ = 0
-        for (x in brick.start.x..brick.end.x) {
-            for (y in brick.start.y..brick.end.y) {
+        for (x in brick.minX..brick.maxX) {
+            for (y in brick.minY..brick.maxY) {
                 val highestZ = highestZs[Node2D(x, y)] ?: continue
-                if (brickLowestZ <= highestZ) {
-                    brickLowestZ = highestZ + 1
-                }
+                brickLowestZ = max(brickLowestZ, highestZ + 1)
             }
         }
         val brickZDiff = abs(brick.start.z - brick.end.z)
 
         val newBrick = Brick(
-            Node3D(brick.start.x, brick.start.y, brickLowestZ),
-            Node3D(brick.end.x, brick.end.y, brickLowestZ + brickZDiff),
+            Node3D(brick.minX, brick.minY, brickLowestZ),
+            Node3D(brick.maxX, brick.maxY, brickLowestZ + brickZDiff),
         )
-        for (x in newBrick.start.x..newBrick.end.x) {
-            for (y in newBrick.start.y..newBrick.end.y) {
+        for (x in newBrick.minX..newBrick.maxX) {
+            for (y in newBrick.minY..newBrick.maxY) {
                 highestZs[Node2D(x, y)] = brickLowestZ + brickZDiff
-                for (z in newBrick.start.z..newBrick.end.z) {
+                for (z in newBrick.minZ..newBrick.maxZ) {
                     brickInCoordinate[Node3D(x, y, z)] = newBrick
                 }
             }
@@ -73,12 +78,12 @@ private fun part1(input: String): Int {
     val brickSupports = mutableMapOf<Brick, List<Brick>>()
     val brickSupportedBy = mutableMapOf<Brick, List<Brick>>()
     bricks.forEach { brick ->
-        val higherZ = max(brick.start.z, brick.end.z) + 1
-        val lowerZ = min(brick.start.z, brick.end.z) - 1
+        val higherZ = brick.maxZ + 1
+        val lowerZ = brick.minZ - 1
         val thisBrickSupports = mutableListOf<Brick>()
         val thisBrickSupportedBy = mutableListOf<Brick>()
-        for (x in brick.start.x..brick.end.x) {
-            for (y in brick.start.y..brick.end.y) {
+        for (x in brick.minX..brick.maxX) {
+            for (y in brick.minY..brick.maxY) {
                 brickInCoordinate[Node3D(x, y, higherZ)]?.let {
                     thisBrickSupports.add(it)
                 }
