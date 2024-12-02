@@ -1,5 +1,6 @@
 package y2024.d02
 
+import intLines
 import java.io.File
 import kotlin.math.abs
 import kotlin.system.measureTimeMillis
@@ -31,9 +32,7 @@ private fun main() {
 }
 
 private fun part1(input: String): Int {
-    val reports = input.lines().map {
-        it.split(" ").map { level -> level.toInt() }
-    }
+    val reports = input.intLines()
     return reports.count { report ->
         val direction = report[0] > report[1]
         report.forEachIndexed { index, i ->
@@ -54,9 +53,7 @@ private fun part1(input: String): Int {
 }
 
 private fun part2(input: String): Int {
-    val reports = input.lines().map {
-        it.split(" ").map { level -> level.toInt() }
-    }
+    val reports = input.intLines()
     return reports.count { report ->
         var directionCount = 0
         report.forEachIndexed { index, i ->

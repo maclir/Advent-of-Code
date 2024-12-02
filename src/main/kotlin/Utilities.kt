@@ -80,3 +80,7 @@ fun <T> List<T>.combinations(size: Int): List<List<T>> = when (size) {
     0 -> listOf(listOf())
     else -> flatMapIndexed { idx, element -> drop(idx + 1).combinations(size - 1).map { listOf(element) + it } }
 }
+
+fun String.intLines(delimiters: String = " ") = this.lines().map { it.split(delimiters).map { digits -> digits.toInt() } }
+
+fun String.longLines(delimiters: String = " ") = this.lines().map { it.split(delimiters).map { digits -> digits.toLong() } }
