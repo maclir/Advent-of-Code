@@ -28,13 +28,18 @@ private fun main() {
 }
 
 private fun part1(input: String): Int {
-    val map = input.lines().map { it.toCharArray().toList() }
-    Regex("([0-9]+)[^:]").findAll(input).map { it.groupValues[1] }.map { it.toInt() }.toSet()
-    Regex("[0-9]+").findAll(input).map(MatchResult::value).map { it.toInt() }
-
-    return map.sumOf { row ->
-        row.size
+    input.lines().map { it.toCharArray().toList() }
+    input.lines().sumOf { line ->
+        """mul\(([0-9]{1,3}),([0-9]{1,3})\)""".toRegex().findAll(line).map {
+            it.groupValues[1].toInt() to it.groupValues[2].toInt()
+        }.sumOf { (a, b) ->
+            a * b
+        }
     }
+    """([0-9]+)[^:]""".toRegex().findAll(input).map { it.groupValues[1] }.map { it.toInt() }.toSet()
+    """[0-9]+""".toRegex().findAll(input).map(MatchResult::value).map { it.toInt() }
+
+    return 0
 }
 
 private fun part2(input: String): Int {

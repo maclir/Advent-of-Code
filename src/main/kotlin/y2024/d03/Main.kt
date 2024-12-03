@@ -31,7 +31,7 @@ private fun main() {
 
 private fun part1(input: String): Int {
     return input.lines().sumOf { line ->
-        Regex("mul\\(([0-9]{1,3}),([0-9]{1,3})\\)").findAll(line).map {
+        """mul\(([0-9]{1,3}),([0-9]{1,3})\)""".toRegex().findAll(line).map {
             it.groupValues[1].toInt() to it.groupValues[2].toInt()
         }.sumOf { (a, b) ->
             a * b
