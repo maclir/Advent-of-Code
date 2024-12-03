@@ -1,5 +1,7 @@
 package template
 
+import intLines
+import longLines
 import java.io.File
 import kotlin.system.measureTimeMillis
 
@@ -28,6 +30,8 @@ private fun main() {
 }
 
 private fun part1(input: String): Int {
+    input.intLines()
+    input.longLines()
     input.lines().map { it.toCharArray().toList() }
     input.lines().sumOf { line ->
         """mul\(([0-9]{1,3}),([0-9]{1,3})\)""".toRegex().findAll(line).map {
@@ -36,8 +40,9 @@ private fun part1(input: String): Int {
             a * b
         }
     }
-    """([0-9]+)[^:]""".toRegex().findAll(input).map { it.groupValues[1] }.map { it.toInt() }.toSet()
-    """[0-9]+""".toRegex().findAll(input).map(MatchResult::value).map { it.toInt() }
+    input.lines().forEach { line ->
+        """[0-9]+""".toRegex().findAll(line).map(MatchResult::value).map { it.toInt() }
+    }
 
     return 0
 }
