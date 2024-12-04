@@ -30,12 +30,14 @@ fun List<Int>.leastCommonMultiple(): Long {
 
 fun <E> Iterable<E>.indicesOf(e: E) = mapIndexedNotNull { index, elem -> index.takeIf { elem == e } }
 
+fun <E> List<E>.safeAccess(index: Int) = if (index in indices) this[index] else null
+
 enum class Direction {
     UP {
         override fun move(current: Node, maxRow: Int, maxCol: Int) =
             if (current.row - 1 < 0) null else Node(current.row - 1, current.col)
 
-        override fun moveIgnoreBounds(current: Node) = Node(current.row - 1, current.col)
+        override fun moveIgnoreBounds(current: Node, step: Int) = Node(current.row - step, current.col)
 
         override fun multiplier() = -1L to 0L
     },
@@ -43,7 +45,7 @@ enum class Direction {
         override fun move(current: Node, maxRow: Int, maxCol: Int) =
             if (current.row + 1 > maxRow) null else Node(current.row + 1, current.col)
 
-        override fun moveIgnoreBounds(current: Node) = Node(current.row + 1, current.col)
+        override fun moveIgnoreBounds(current: Node, step: Int) = Node(current.row + step, current.col)
 
         override fun multiplier() = 1L to 0L
     },
@@ -51,7 +53,7 @@ enum class Direction {
         override fun move(current: Node, maxRow: Int, maxCol: Int) =
             if (current.col + 1 > maxCol) null else Node(current.row, current.col + 1)
 
-        override fun moveIgnoreBounds(current: Node) = Node(current.row, current.col + 1)
+        override fun moveIgnoreBounds(current: Node, step: Int) = Node(current.row, current.col + step)
 
         override fun multiplier() = 0L to 1L
     },
@@ -59,22 +61,41 @@ enum class Direction {
         override fun move(current: Node, maxRow: Int, maxCol: Int) =
             if (current.col - 1 < 0) null else Node(current.row, current.col - 1)
 
-        override fun moveIgnoreBounds(current: Node) = Node(current.row, current.col - 1)
+        override fun moveIgnoreBounds(current: Node, step: Int) = Node(current.row, current.col - step)
 
         override fun multiplier() = 0L to -1L
     };
 
     abstract fun move(current: Node, maxRow: Int, maxCol: Int): Node?
-    abstract fun moveIgnoreBounds(current: Node): Node
+    abstract fun moveIgnoreBounds(current: Node, step: Int = 1): Node
     abstract fun multiplier(): Pair<Long, Long>
+}
+
+enum class DiagonalDirection {
+    UP_RIGHT {
+        override fun move(current: Node, step: Int) = Node(current.row - step, current.col + step)
+    },
+    UP_LEFT {
+        override fun move(current: Node, step: Int) = Node(current.row - step, current.col - step)
+    },
+    DOWN_RIGHT {
+        override fun move(current: Node, step: Int) = Node(current.row + step, current.col + step)
+    },
+    DOWN_LEFT {
+        override fun move(current: Node, step: Int) = Node(current.row + step, current.col - step)
+    };
+
+    abstract fun move(current: Node, step: Int = 1): Node
 }
 
 data class Node(val row: Int, val col: Int) {
     var visited: Boolean = false
-    fun move(direction: Direction) = direction.moveIgnoreBounds(this)
+    fun move(direction: Direction, step: Int = 1) = direction.moveIgnoreBounds(this, step)
+    fun move(direction: DiagonalDirection, step: Int = 1) = direction.move(this, step)
 }
 
 fun List<List<Char>>.atNode(node: Node) = this[node.row][node.col]
+fun List<List<Char>>.atNodeSafe(node: Node) = this.safeAccess(node.row)?.safeAccess(node.col)
 
 fun <T> List<T>.combinations(size: Int): List<List<T>> = when (size) {
     0 -> listOf(listOf())
