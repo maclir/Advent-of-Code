@@ -1,6 +1,10 @@
 package utilities
 
-enum class Direction {
+interface Direction {
+    abstract fun move(current: Node, step: Int = 1): Node
+}
+
+enum class BaseDirection : Direction {
     UP {
         override fun move(current: Node, step: Int) = Node(current.row - step, current.col)
     },
@@ -14,10 +18,9 @@ enum class Direction {
         override fun move(current: Node, step: Int) = Node(current.row, current.col - step)
     };
 
-    abstract fun move(current: Node, step: Int = 1): Node
 }
 
-enum class DiagonalDirection {
+enum class DiagonalDirection : Direction {
     UP_RIGHT {
         override fun move(current: Node, step: Int) = Node(current.row - step, current.col + step)
     },
@@ -30,14 +33,14 @@ enum class DiagonalDirection {
     DOWN_LEFT {
         override fun move(current: Node, step: Int) = Node(current.row + step, current.col - step)
     };
-
-    abstract fun move(current: Node, step: Int = 1): Node
 }
 
+val allDirections: List<Direction> = BaseDirection.entries.plus(DiagonalDirection.entries)
+
 data class Node(val row: Int, val col: Int) {
-    var visited: Boolean = false
     fun move(direction: Direction, step: Int = 1) = direction.move(this, step)
-    fun move(direction: DiagonalDirection, step: Int = 1) = direction.move(this, step)
+    fun adjacent() = BaseDirection.entries.map { direction -> direction.move(this) }
+    fun surrounding() = allDirections.map { direction -> direction.move(this) }
 }
 
 fun List<List<Char>>.atNode(node: Node) = this[node.row][node.col]

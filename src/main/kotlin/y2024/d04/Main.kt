@@ -1,9 +1,6 @@
 package y2024.d04
 
-import utilities.DiagonalDirection
-import utilities.Direction
-import utilities.Node
-import utilities.atNodeSafe
+import utilities.*
 import java.io.File
 import kotlin.system.measureTimeMillis
 
@@ -40,7 +37,7 @@ private fun part1(input: String): Int {
         for (col in grid[0].indices) {
             if (grid[row][col] == 'X') {
                 val currentNode = Node(row, col)
-                for (direction in Direction.entries) {
+                for (direction in BaseDirection.entries) {
                     if (
                         grid.atNodeSafe(currentNode.move(direction, 1)) == 'M' &&
                         grid.atNodeSafe(currentNode.move(direction, 2)) == 'A' &&
