@@ -1,6 +1,6 @@
 package y2022.d24
 
-import leastCommonMultiple
+import utilities.leastCommonMultiple
 import java.io.File
 import kotlin.system.measureTimeMillis
 

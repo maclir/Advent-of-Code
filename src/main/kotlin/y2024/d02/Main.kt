@@ -1,6 +1,6 @@
 package y2024.d02
 
-import intLines
+import utilities.intLines
 import java.io.File
 import kotlin.math.abs
 import kotlin.system.measureTimeMillis

@@ -1,6 +1,6 @@
 package y2023.d24
 
-import combinations
+import utilities.combinations
 import java.io.File
 import kotlin.system.measureTimeMillis
 

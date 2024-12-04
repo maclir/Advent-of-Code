@@ -1,6 +1,6 @@
 package y2023.d20
 
-import leastCommonMultiple
+import utilities.leastCommonMultiple
 import java.io.File
 import kotlin.system.measureTimeMillis
 

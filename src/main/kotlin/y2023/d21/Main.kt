@@ -1,7 +1,7 @@
 package y2023.d21
 
-import Direction
-import Node
+import utilities.Direction
+import utilities.Node
 import java.io.File
 import kotlin.system.measureTimeMillis
 
@@ -54,7 +54,7 @@ private fun part1(input: String): Int {
         if (step > maxDistance) break
         if (position in visited) continue
         if (step % 2 == 0) visited.add(position)
-        queue.addAll(Direction.values().mapNotNull { it.move(position, maxRow, maxCol) }.filter { map[it.row][it.col] != '#' }.map { it to step + 1 })
+        queue.addAll(Direction.values().mapNotNull { it.moveWithBounds(position, maxRow, maxCol) }.filter { map[it.row][it.col] != '#' }.map { it to step + 1 })
     }
 
     return visited.size
@@ -107,7 +107,7 @@ private fun part2(input: String): Long {
             previousPlots = plots
         }
         plots = visited.size.toLong()
-        queue.addAll(Direction.values().mapNotNull { it.move(position, maxRow, maxCol) }.filter { map[it.row][it.col] != '#' }.map { it to step + 1 })
+        queue.addAll(Direction.values().mapNotNull { it.moveWithBounds(position, maxRow, maxCol) }.filter { map[it.row][it.col] != '#' }.map { it to step + 1 })
 
     }
     while (skip < maxDistance) {
@@ -116,4 +116,11 @@ private fun part2(input: String): Long {
         delta += delta2
     }
     return plots
+}
+
+private fun Direction.moveWithBounds(current: Node, maxRow: Int, maxCol: Int) = when (this) {
+    Direction.UP -> if (current.row - 1 < 0) null else Node(current.row - 1, current.col)
+    Direction.DOWN -> if (current.row + 1 > maxRow) null else Node(current.row + 1, current.col)
+    Direction.RIGHT -> if (current.col + 1 > maxCol) null else Node(current.row, current.col + 1)
+    Direction.LEFT -> if (current.col - 1 < 0) null else Node(current.row, current.col - 1)
 }

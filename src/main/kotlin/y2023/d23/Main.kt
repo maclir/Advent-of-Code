@@ -1,8 +1,8 @@
 package y2023.d23
 
-import Direction
-import Node
-import atNode
+import utilities.Direction
+import utilities.Node
+import utilities.atNode
 import java.io.File
 import kotlin.system.measureTimeMillis
 
@@ -47,7 +47,7 @@ private fun part1(input: String): Int {
                 else -> {
                     edges.addAll(
                         Direction.values()
-                            .mapNotNull { direction -> direction.move(node, map.lastIndex, map[0].lastIndex) }
+                            .mapNotNull { direction -> direction.moveWithBounds(node, map.lastIndex, map[0].lastIndex) }
                             .filter { map.atNode(it) != '#' })
                 }
             }
@@ -80,7 +80,7 @@ private fun part2(input: String): Int {
             val node = Node(rowIndex, colIndex)
             if (map.atNode(node) == '#') return@forEachIndexed
             graph[node] =
-                Direction.values().mapNotNull { direction -> direction.move(node, map.lastIndex, map[0].lastIndex) }
+                Direction.values().mapNotNull { direction -> direction.moveWithBounds(node, map.lastIndex, map[0].lastIndex) }
                     .filter { map.atNode(it) != '#' }
         }
     }
@@ -102,4 +102,11 @@ private fun part2(input: String): Int {
     }
 
     return longestPath(Node(0, 1), Node(map.lastIndex, map[0].lastIndex - 1))
+}
+
+private fun Direction.moveWithBounds(current: Node, maxRow: Int, maxCol: Int) = when (this) {
+    Direction.UP -> if (current.row - 1 < 0) null else Node(current.row - 1, current.col)
+    Direction.DOWN -> if (current.row + 1 > maxRow) null else Node(current.row + 1, current.col)
+    Direction.RIGHT -> if (current.col + 1 > maxCol) null else Node(current.row, current.col + 1)
+    Direction.LEFT -> if (current.col - 1 < 0) null else Node(current.row, current.col - 1)
 }

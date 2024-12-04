@@ -1,12 +1,9 @@
 package y2024.d04
 
-import DiagonalDirection
-import Direction
-import Node
-import atNodeSafe
-import intLines
-import longLines
-import safeAccess
+import utilities.DiagonalDirection
+import utilities.Direction
+import utilities.Node
+import utilities.atNodeSafe
 import java.io.File
 import kotlin.system.measureTimeMillis
 

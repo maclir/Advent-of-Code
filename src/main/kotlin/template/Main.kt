@@ -1,7 +1,7 @@
 package template
 
-import intLines
-import longLines
+import utilities.intLines
+import utilities.longLines
 import java.io.File
 import kotlin.system.measureTimeMillis
 
