@@ -6,18 +6,23 @@ interface Direction {
 
 enum class BaseDirection : Direction {
     UP {
+        override fun turnClockwise() = RIGHT
         override fun move(current: Node, step: Int) = Node(current.row - step, current.col)
     },
     DOWN {
+        override fun turnClockwise() = LEFT
         override fun move(current: Node, step: Int) = Node(current.row + step, current.col)
     },
     RIGHT {
+        override fun turnClockwise() = DOWN
         override fun move(current: Node, step: Int) = Node(current.row, current.col + step)
     },
     LEFT {
+        override fun turnClockwise() = UP
         override fun move(current: Node, step: Int) = Node(current.row, current.col - step)
     };
 
+    abstract fun turnClockwise(): BaseDirection
 }
 
 enum class DiagonalDirection : Direction {
