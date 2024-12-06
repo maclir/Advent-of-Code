@@ -1,5 +1,6 @@
 package template
 
+import utilities.Node
 import utilities.intLines
 import utilities.longLines
 import java.io.File
@@ -33,6 +34,15 @@ private fun part1(input: String): Int {
     input.intLines()
     input.longLines()
     input.lines().map { it.toCharArray().toList() }
+    var currentNode: Node
+    input.lines().mapIndexed { rowIndex, row ->
+        row.toCharArray().toList().mapIndexed { colIndex, c ->
+            if (c == '^') {
+                currentNode = Node(rowIndex, colIndex)
+                '.'
+            } else c
+        }
+    }
     input.lines().sumOf { line ->
         """mul\(([0-9]{1,3}),([0-9]{1,3})\)""".toRegex().findAll(line).map {
             it.groupValues[1].toInt() to it.groupValues[2].toInt()

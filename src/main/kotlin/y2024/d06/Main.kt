@@ -34,12 +34,11 @@ private fun part1(input: String): Int {
     var currentNode = Node(0, 0)
     var currentDirection = BaseDirection.UP
     val map = input.lines().mapIndexed { rowIndex, row ->
-        val colIndex = row.indexOf('^')
-        if (colIndex != -1) {
-            currentNode = Node(rowIndex, colIndex)
-        }
-        row.toCharArray().toList().map {
-            if (it == '^') '.' else it
+        row.toCharArray().toList().mapIndexed { colIndex, c ->
+            if (c == '^') {
+                currentNode = Node(rowIndex, colIndex)
+                '.'
+            } else c
         }
     }
 
@@ -65,12 +64,11 @@ private fun part2(input: String): Int {
     var currentNode = Node(0, 0)
     var currentDirection = BaseDirection.UP
     val map = input.lines().mapIndexed { rowIndex, row ->
-        val colIndex = row.indexOf('^')
-        if (colIndex != -1) {
-            currentNode = Node(rowIndex, colIndex)
-        }
-        row.toCharArray().toList().map {
-            if (it == '^') '.' else it
+        row.toCharArray().toList().mapIndexed { colIndex, c ->
+            if (c == '^') {
+                currentNode = Node(rowIndex, colIndex)
+                '.'
+            } else c
         }
     }
 
