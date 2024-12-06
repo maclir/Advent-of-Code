@@ -74,15 +74,26 @@ private fun part2(input: String): Int {
         }
     }
 
-    var count = 0
-     map.forEachIndexed { rowIndex, row ->
-        row.forEachIndexed { colIndex, c ->
-            if (c == '.') {
-                if (isStuckInLoop(map, Node(currentNode.row, currentNode.col), Node(rowIndex, colIndex))) count++
+    val initialNode = currentNode
+    val visited = mutableSetOf(currentNode)
+    while (true) {
+        val nextNode = currentNode.move(currentDirection)
+        when (map.atNodeSafe(nextNode)) {
+            '.' -> {
+                currentNode = nextNode
+                visited.add(currentNode)
             }
+
+            '#' -> {
+                currentDirection = currentDirection.turnClockwise()
+            }
+
+            null -> break
         }
     }
-    return count
+    return visited.minus(initialNode).count {
+        isStuckInLoop(map, Node(initialNode.row, initialNode.col), it)
+    }
 }
 
 private fun isStuckInLoop(map: List<List<Char>>, node: Node, block: Node): Boolean {
