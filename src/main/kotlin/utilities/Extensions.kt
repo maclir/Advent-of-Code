@@ -42,3 +42,5 @@ fun <T> List<T>.combinations(size: Int): List<List<T>> = when (size) {
 fun String.intLines(delimiters: String = " ") = this.lines().map { it.split(delimiters).map { digits -> digits.toInt() } }
 
 fun String.longLines(delimiters: String = " ") = this.lines().map { it.split(delimiters).map { digits -> digits.toLong() } }
+
+fun List<List<Char>>.print() = forEach { row -> println(row) }

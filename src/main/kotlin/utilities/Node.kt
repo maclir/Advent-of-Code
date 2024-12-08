@@ -44,8 +44,10 @@ val allDirections: List<Direction> = BaseDirection.entries.plus(DiagonalDirectio
 
 data class Node(val row: Int, val col: Int) {
     fun move(direction: Direction, step: Int = 1) = direction.move(this, step)
+    fun move(rowStep: Int, colStep: Int) = Node(row + rowStep, col + colStep)
     fun adjacent() = BaseDirection.entries.map { direction -> direction.move(this) }
     fun surrounding() = allDirections.map { direction -> direction.move(this) }
+    fun isInMap(map: List<List<Any>>) = row in 0..map.lastIndex && col in 0..map[0].lastIndex
 }
 
 fun List<List<Char>>.atNode(node: Node) = this[node.row][node.col]
