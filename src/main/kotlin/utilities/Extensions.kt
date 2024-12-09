@@ -43,4 +43,4 @@ fun String.intLines(delimiters: String = " ") = this.lines().map { it.split(deli
 
 fun String.longLines(delimiters: String = " ") = this.lines().map { it.split(delimiters).map { digits -> digits.toLong() } }
 
-fun List<List<Char>>.print() = forEach { row -> println(row) }
+fun List<List<Any>>.print() = forEach { row -> println(row) }
