@@ -50,5 +50,5 @@ data class Node(val row: Int, val col: Int) {
     fun isInMap(map: List<List<Any>>) = row in 0..map.lastIndex && col in 0..map[0].lastIndex
 }
 
-fun List<List<Char>>.atNode(node: Node) = this[node.row][node.col]
-fun List<List<Char>>.atNodeSafe(node: Node) = this.safeAccess(node.row)?.safeAccess(node.col)
+fun <T> List<List<T>>.atNode(node: Node) = this[node.row][node.col]
+fun <T> List<List<T>>.atNodeSafe(node: Node) = this.safeAccess(node.row)?.safeAccess(node.col)

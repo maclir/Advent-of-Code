@@ -39,8 +39,11 @@ fun <T> List<T>.combinations(size: Int): List<List<T>> = when (size) {
     else -> flatMapIndexed { idx, element -> drop(idx + 1).combinations(size - 1).map { listOf(element) + it } }
 }
 
-fun String.intLines(delimiters: String = " ") = this.lines().map { it.split(delimiters).map { digits -> digits.toInt() } }
+fun String.intLines(delimiters: String = " ") =
+    if (delimiters != "") this.lines().map { it.split(delimiters).map { digits -> digits.toInt() } }
+    else this.lines().map { it.split(delimiters).drop(1).dropLast(1).map { digits -> digits.toInt() } }
 
-fun String.longLines(delimiters: String = " ") = this.lines().map { it.split(delimiters).map { digits -> digits.toLong() } }
+fun String.longLines(delimiters: String = " ") =
+    this.lines().map { it.split(delimiters).map { digits -> digits.toLong() } }
 
 fun List<List<Any>>.print() = forEach { row -> println(row) }
