@@ -1,8 +1,6 @@
 package y2024.d11
 
-import utilities.Node
-import utilities.intLines
-import utilities.longLines
+import utilities.*
 import java.io.File
 import kotlin.system.measureTimeMillis
 
@@ -41,9 +39,10 @@ private fun part1(input: String): Int {
     return arrangement.size
 }
 
+private val cachedBlink = { stone: Long, count: Int -> blink(stone, count) }.cache()
 private fun part2(input: String): Long {
     return input.split(" ").map { it.toLong() }.sumOf {
-        blink(it, 0)
+        cachedBlink(it, 0)
     }
 }
 
@@ -67,31 +66,20 @@ private fun blink(arrangement: List<Long>): List<Long> {
     return newList
 }
 
-private val cache = mutableMapOf<Pair<Long, Int>, Long>()
 private fun blink(stone: Long, count: Int): Long {
-    val cacheInput = cache[stone to count]
-    if (cacheInput != null) {
-        return cacheInput
-    }
     if (count >= 75) {
         return 1
     }
 
     if (stone == 0L) {
-        val out = blink(1, count + 1)
-        cache[stone to count] = out
-        return out
+        return cachedBlink(1, count + 1)
     }
 
     val stoneStr = stone.toString()
     if (stoneStr.length % 2 == 0) {
-        val newList = blink(stoneStr.substring(0, stoneStr.length / 2).toLong(), count + 1) +
-        blink(stoneStr.substring(stoneStr.length / 2, stoneStr.length).toLong(), count + 1)
-        cache[stone to count] = newList
-        return newList
+        return cachedBlink(stoneStr.substring(0, stoneStr.length / 2).toLong(), count + 1) +
+                cachedBlink(stoneStr.substring(stoneStr.length / 2, stoneStr.length).toLong(), count + 1)
     }
 
-    val out = blink(stone * 2024, count + 1)
-    cache[stone to count] = out
-    return out
+    return cachedBlink(stone * 2024, count + 1)
 }
