@@ -52,3 +52,11 @@ data class Node(val row: Int, val col: Int) {
 
 fun <T> List<List<T>>.atNode(node: Node) = this[node.row][node.col]
 fun <T> List<List<T>>.atNodeSafe(node: Node) = this.safeAccess(node.row)?.safeAccess(node.col)
+
+fun <E> List<List<E>>.forEachNode(action: (node: Node, E) -> Unit) {
+    this.forEachIndexed { rIndex, r ->
+        r.forEachIndexed { cIndex, c ->
+            action(Node(rIndex, cIndex), c)
+        }
+    }
+}

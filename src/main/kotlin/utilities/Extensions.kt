@@ -46,4 +46,6 @@ fun String.intLines(delimiters: String = " ") =
 fun String.longLines(delimiters: String = " ") =
     this.lines().map { it.split(delimiters).map { digits -> digits.toLong() } }
 
+fun String.charGrid() = lines().map { it.toCharArray().toList() }
+
 fun List<List<Any>>.print() = forEach { row -> println(row) }
