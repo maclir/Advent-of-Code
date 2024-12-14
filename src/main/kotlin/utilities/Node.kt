@@ -48,6 +48,11 @@ data class Node(val row: Int, val col: Int) {
     fun adjacent() = BaseDirection.entries.map { direction -> direction.move(this) }
     fun surrounding() = allDirections.map { direction -> direction.move(this) }
     fun isInMap(map: List<List<Any>>) = row in 0..map.lastIndex && col in 0..map[0].lastIndex
+    fun warpInMapMove(map: List<List<Any>>, rowStep: Int, colStep: Int) = this.move(rowStep, colStep).warpInMap(map)
+    fun warpInMap(map: List<List<Any>>) = Node(
+        (row % map.size + map.size) % map.size,
+        (col % map[0].size + map[0].size) % map[0].size,
+    )
 }
 
 fun <T> List<List<T>>.atNode(node: Node) = this[node.row][node.col]

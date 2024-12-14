@@ -50,6 +50,12 @@ private fun part1(input: String): Int {
             a * b
         }
     }
+    input.lines().map { line ->
+        """p=([0-9]+),([0-9]+) v=([\-0-9]+),([\-0-9]+)""".toRegex().find(line)!!.groupValues
+            .drop(1).map {
+                it.toInt()
+            }
+    }
     input.lines().forEach { line ->
         """[0-9]+""".toRegex().findAll(line).map(MatchResult::value).map { it.toInt() }
     }
