@@ -36,7 +36,7 @@ private fun part1(input: String): Int {
     input.longLines()
     input.charGrid()
     input.lines().map { it.toCharArray().toList() }
-    var currentNode: Node
+    lateinit var currentNode: Node
     input.lines().mapIndexed { rowIndex, row ->
         row.toCharArray().toList().mapIndexed { colIndex, c ->
             if (c == '^') {

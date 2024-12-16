@@ -6,23 +6,28 @@ interface Direction {
 
 enum class BaseDirection : Direction {
     UP {
+        override fun opposite() = DOWN
         override fun turnClockwise() = RIGHT
         override fun move(current: Node, step: Int) = Node(current.row - step, current.col)
     },
     DOWN {
+        override fun opposite() = UP
         override fun turnClockwise() = LEFT
         override fun move(current: Node, step: Int) = Node(current.row + step, current.col)
     },
     RIGHT {
+        override fun opposite() = LEFT
         override fun turnClockwise() = DOWN
         override fun move(current: Node, step: Int) = Node(current.row, current.col + step)
     },
     LEFT {
+        override fun opposite() = RIGHT
         override fun turnClockwise() = UP
         override fun move(current: Node, step: Int) = Node(current.row, current.col - step)
     };
 
     abstract fun turnClockwise(): BaseDirection
+    abstract fun opposite(): BaseDirection
     fun isHorizontal() = this == RIGHT || this == LEFT
     fun isVertical() = !isHorizontal()
 }
@@ -59,6 +64,9 @@ data class Node(val row: Int, val col: Int) {
 
 fun <T> List<List<T>>.atNode(node: Node) = this[node.row][node.col]
 fun <T> List<List<T>>.atNodeSafe(node: Node) = this.safeAccess(node.row)?.safeAccess(node.col)
+fun <T> List<List<T>>.atNodeOrDefault(node: Node, default: T) =
+    this.safeAccess(node.row)?.safeAccess(node.col) ?: default
+
 fun <T> List<MutableList<T>>.setNode(node: Node, t: T) {
     this[node.row][node.col] = t
 }
