@@ -1,6 +1,7 @@
 package template
 
 import utilities.Node
+import utilities.charGrid
 import utilities.intLines
 import utilities.longLines
 import java.io.File
@@ -33,6 +34,7 @@ private fun main() {
 private fun part1(input: String): Int {
     input.intLines()
     input.longLines()
+    input.charGrid()
     input.lines().map { it.toCharArray().toList() }
     var currentNode: Node
     input.lines().mapIndexed { rowIndex, row ->

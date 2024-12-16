@@ -23,6 +23,8 @@ enum class BaseDirection : Direction {
     };
 
     abstract fun turnClockwise(): BaseDirection
+    fun isHorizontal() = this == RIGHT || this == LEFT
+    fun isVertical() = !isHorizontal()
 }
 
 enum class DiagonalDirection : Direction {
@@ -57,6 +59,9 @@ data class Node(val row: Int, val col: Int) {
 
 fun <T> List<List<T>>.atNode(node: Node) = this[node.row][node.col]
 fun <T> List<List<T>>.atNodeSafe(node: Node) = this.safeAccess(node.row)?.safeAccess(node.col)
+fun <T> List<MutableList<T>>.setNode(node: Node, t: T) {
+    this[node.row][node.col] = t
+}
 
 fun <E> List<List<E>>.forEachNode(action: (node: Node, E) -> Unit) {
     this.forEachIndexed { rIndex, r ->

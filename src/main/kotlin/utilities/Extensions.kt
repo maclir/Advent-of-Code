@@ -48,4 +48,7 @@ fun String.longLines(delimiters: String = " ") =
 
 fun String.charGrid() = lines().map { it.toCharArray().toList() }
 
-fun List<List<Any>>.print() = forEach { row -> println(row) }
+fun List<List<Any>>.print() = forEach { row ->
+    row.forEach { print(it) }
+    println()
+}
