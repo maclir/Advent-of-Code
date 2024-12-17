@@ -1,5 +1,6 @@
 package utilities
 
+import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -51,4 +52,24 @@ fun String.charGrid() = lines().map { it.toCharArray().toList() }
 fun List<List<Any>>.print() = forEach { row ->
     row.forEach { print(it) }
     println()
+}
+
+fun Int.isPowerOf(number: Int): Boolean {
+    if (this == 1) return (number == 1)
+
+    var pow = 1
+    while (pow < this) pow *= number
+
+    return pow == this
+}
+
+
+fun BigInteger.isPowerOf(number: Int): Boolean {
+    if (this == 1.toBigInteger()) return (number == 1)
+
+    val bigIntegerNumber = number.toBigInteger()
+    var pow = 1.toBigInteger()
+    while (pow < this) pow *= bigIntegerNumber
+
+    return pow == this
 }
