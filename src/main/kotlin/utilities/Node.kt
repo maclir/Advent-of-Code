@@ -54,7 +54,7 @@ data class Node(val row: Int, val col: Int) {
     fun move(rowStep: Int, colStep: Int) = Node(row + rowStep, col + colStep)
     fun adjacent() = BaseDirection.entries.map { direction -> direction.move(this) }
     fun surrounding() = allDirections.map { direction -> direction.move(this) }
-    fun isInMap(map: List<List<Any>>) = row in 0..map.lastIndex && col in 0..map[0].lastIndex
+    fun <T> isInMap(map: List<List<T>>) = row in 0..map.lastIndex && col in 0..map[0].lastIndex
     fun warpInMapMove(map: List<List<Any>>, rowStep: Int, colStep: Int) = this.move(rowStep, colStep).warpInMap(map)
     fun warpInMap(map: List<List<Any>>) = Node(
         (row % map.size + map.size) % map.size,
