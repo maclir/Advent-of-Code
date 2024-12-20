@@ -32,6 +32,7 @@ private fun main() {
 }
 
 private fun part1(input: String): Int {
+    val (aInput, bInput) = input.split("\n\n")
     input.intLines()
     input.longLines()
     input.charGrid()

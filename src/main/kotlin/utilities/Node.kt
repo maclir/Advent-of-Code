@@ -67,8 +67,9 @@ fun <T> List<List<T>>.atNodeSafe(node: Node) = this.safeAccess(node.row)?.safeAc
 fun <T> List<List<T>>.atNodeOrDefault(node: Node, default: T) =
     this.safeAccess(node.row)?.safeAccess(node.col) ?: default
 
-fun <T> List<MutableList<T>>.setNode(node: Node, t: T) {
+fun <T> List<MutableList<T>>.setNode(node: Node, t: T): List<MutableList<T>> {
     this[node.row][node.col] = t
+    return this
 }
 
 fun <E> List<List<E>>.forEachNode(action: (node: Node, E) -> Unit) {
