@@ -79,3 +79,12 @@ fun <E> List<List<E>>.forEachNode(action: (node: Node, E) -> Unit) {
         }
     }
 }
+
+fun <E> List<List<E>>.findNode(predicate: (E) -> Boolean): Node {
+    this.forEachIndexed { rIndex, r ->
+        r.forEachIndexed { cIndex, c ->
+            if (predicate(c)) return Node(rIndex, cIndex)
+        }
+    }
+    throw Exception("Node not found!")
+}
