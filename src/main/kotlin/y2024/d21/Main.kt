@@ -53,7 +53,7 @@ private fun part1(input: String): Int {
     val shortestDirectionPadPathDirections = mutableMapOf<Node, Map<Node, List<List<BaseDirection>>>>()
     directionPad.forEachNode { node, c ->
         if (c == '#') return@forEachNode
-        shortestDirectionPadPathDirections[node] = node.shortestPathsDirections(keypad) { it == '#' }
+        shortestDirectionPadPathDirections[node] = node.shortestPathsDirections(directionPad) { it == '#' }
     }
 
     val directionPadNodes = mutableMapOf<Char, Node>()
@@ -161,7 +161,7 @@ private fun part2(input: String): BigInteger {
     val shortestDirectionPadPathDirections = mutableMapOf<Node, Map<Node, List<List<BaseDirection?>>>>()
     directionPad.forEachNode { node, c ->
         if (c == '#') return@forEachNode
-        shortestDirectionPadPathDirections[node] = node.shortestPathsDirections(keypad) { it == '#' }.mapValues {
+        shortestDirectionPadPathDirections[node] = node.shortestPathsDirections(directionPad) { it == '#' }.mapValues {
             it.value.map {
                 val withA = mutableListOf<BaseDirection?>()
                 withA.addAll(it)
@@ -178,13 +178,12 @@ private fun part2(input: String): BigInteger {
         directionPadNodes[c] = node
     }
 
-
     return input.lines().sumOf { code ->
         val codeNodes = code.map { c ->
             keypad.findNode { it == c }
         }
         var currentKeypadNode = Node(3, 2)
-        val score = codeNodes.map { targetNode ->
+        val expandedLength = codeNodes.map { targetNode ->
             val possiblePaths = shortestKeypadPathDirections.getValue(currentKeypadNode).getValue(targetNode)
             currentKeypadNode = targetNode
             possiblePaths
@@ -193,7 +192,7 @@ private fun part2(input: String): BigInteger {
                 var currentNode = directionPadNodes.getValue('A')
                 directionList.sumOf { targetDirection ->
                     val targetNode = directionPadNodes.getValue(targetDirection.toChar())
-                    val expanded = expandDirection(
+                    val innerExpandedLength = getExpandedLength(
                         currentNode,
                         targetNode,
                         25,
@@ -201,26 +200,26 @@ private fun part2(input: String): BigInteger {
                         shortestDirectionPadPathDirections
                     )
                     currentNode = targetNode
-                    expanded
+                    innerExpandedLength
                 }
             } ?: throw Exception()
         }
-        score * code.substring(0, 3).toBigInteger()
+        expandedLength * code.substring(0, 3).toBigInteger()
     }
 }
 
 private val cache = mutableMapOf<Triple<Node, Node, Int>, BigInteger>()
-private fun expandDirection(
+private fun getExpandedLength(
     currentNode: Node,
     targetNode: Node,
     depth: Int,
     directionPadNodes: Map<Char, Node>,
-    shortestDirectionPadPathDirections: Map<Node, Map<Node, List<List<BaseDirection?>>>>
+    shortestPaths: Map<Node, Map<Node, List<List<BaseDirection?>>>>
 ): BigInteger {
     val cacheKey = Triple(currentNode, targetNode, depth)
     if (cache.contains(cacheKey)) return cache.getValue(cacheKey)
 
-    val possiblePaths = shortestDirectionPadPathDirections.getValue(currentNode).getValue(targetNode)
+    val possiblePaths = shortestPaths.getValue(currentNode).getValue(targetNode)
     val returnValue = if (depth == 1) {
         possiblePaths.first().size.toBigInteger()
     } else {
@@ -229,7 +228,7 @@ private fun expandDirection(
             possiblePath.sumOf {
                 val tNode = directionPadNodes.getValue(it.toChar())
                 val nextDepthScore =
-                    expandDirection(cNode, tNode, depth - 1, directionPadNodes, shortestDirectionPadPathDirections)
+                    getExpandedLength(cNode, tNode, depth - 1, directionPadNodes, shortestPaths)
                 cNode = tNode
                 nextDepthScore
             }
