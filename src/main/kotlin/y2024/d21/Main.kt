@@ -2,6 +2,7 @@ package y2024.d21
 
 import utilities.*
 import java.io.File
+import java.math.BigInteger
 import kotlin.system.measureTimeMillis
 
 private fun main() {
@@ -131,6 +132,109 @@ private fun BaseDirection?.toChar() = when (this) {
     null -> 'A'
 }
 
-private fun part2(input: String): Int {
-    return 0
+private fun part2(input: String): BigInteger {
+    val keypad = listOf(
+        listOf('7', '8', '9'),
+        listOf('4', '5', '6'),
+        listOf('1', '2', '3'),
+        listOf('#', '0', 'A'),
+    )
+
+    val directionPad = listOf(
+        listOf('#', '^', 'A'),
+        listOf('<', 'v', '>'),
+    )
+
+    val shortestKeypadPathDirections = mutableMapOf<Node, Map<Node, List<List<BaseDirection?>>>>()
+    keypad.forEachNode { node, c ->
+        if (c == '#') return@forEachNode
+        shortestKeypadPathDirections[node] = node.shortestPathsDirections(keypad) { it == '#' }.mapValues {
+            it.value.map {
+                val withA = mutableListOf<BaseDirection?>()
+                withA.addAll(it)
+                withA.add(null)
+                withA
+            }
+        }
+    }
+
+    val shortestDirectionPadPathDirections = mutableMapOf<Node, Map<Node, List<List<BaseDirection?>>>>()
+    directionPad.forEachNode { node, c ->
+        if (c == '#') return@forEachNode
+        shortestDirectionPadPathDirections[node] = node.shortestPathsDirections(keypad) { it == '#' }.mapValues {
+            it.value.map {
+                val withA = mutableListOf<BaseDirection?>()
+                withA.addAll(it)
+                withA.add(null)
+                withA
+            }.ifEmpty {
+                listOf(listOf(null))
+            }
+        }
+    }
+
+    val directionPadNodes = mutableMapOf<Char, Node>()
+    directionPad.forEachNode { node, c ->
+        directionPadNodes[c] = node
+    }
+
+
+    return input.lines().sumOf { code ->
+        val codeNodes = code.map { c ->
+            keypad.findNode { it == c }
+        }
+        var currentKeypadNode = Node(3, 2)
+        val score = codeNodes.map { targetNode ->
+            val possiblePaths = shortestKeypadPathDirections.getValue(currentKeypadNode).getValue(targetNode)
+            currentKeypadNode = targetNode
+            possiblePaths
+        }.sumOf { codeNodeDirectionOptions ->
+            codeNodeDirectionOptions.minOfOrNull { directionList ->
+                var currentNode = directionPadNodes.getValue('A')
+                directionList.sumOf { targetDirection ->
+                    val targetNode = directionPadNodes.getValue(targetDirection.toChar())
+                    val expanded = expandDirection(
+                        currentNode,
+                        targetNode,
+                        25,
+                        directionPadNodes,
+                        shortestDirectionPadPathDirections
+                    )
+                    currentNode = targetNode
+                    expanded
+                }
+            } ?: throw Exception()
+        }
+        score * code.substring(0, 3).toBigInteger()
+    }
+}
+
+private val cache = mutableMapOf<Triple<Node, Node, Int>, BigInteger>()
+private fun expandDirection(
+    currentNode: Node,
+    targetNode: Node,
+    depth: Int,
+    directionPadNodes: Map<Char, Node>,
+    shortestDirectionPadPathDirections: Map<Node, Map<Node, List<List<BaseDirection?>>>>
+): BigInteger {
+    val cacheKey = Triple(currentNode, targetNode, depth)
+    if (cache.contains(cacheKey)) return cache.getValue(cacheKey)
+
+    val possiblePaths = shortestDirectionPadPathDirections.getValue(currentNode).getValue(targetNode)
+    val returnValue = if (depth == 1) {
+        possiblePaths.first().size.toBigInteger()
+    } else {
+        possiblePaths.minOfOrNull { possiblePath ->
+            var cNode = directionPadNodes.getValue('A')
+            possiblePath.sumOf {
+                val tNode = directionPadNodes.getValue(it.toChar())
+                val nextDepthScore =
+                    expandDirection(cNode, tNode, depth - 1, directionPadNodes, shortestDirectionPadPathDirections)
+                cNode = tNode
+                nextDepthScore
+            }
+        } ?: throw Exception()
+    }
+    cache[cacheKey] = returnValue
+    return returnValue
 }
