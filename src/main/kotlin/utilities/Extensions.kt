@@ -73,3 +73,15 @@ fun BigInteger.isPowerOf(number: Int): Boolean {
 
     return pow == this
 }
+
+fun <T> List<List<T>>.transpose(): List<List<T>> {
+    var transposed = mutableListOf<List<T>>()
+    for (i in first().indices) {
+        val col: MutableList<T> = ArrayList()
+        forEach { row ->
+            col.add(row[i])
+        }
+        transposed.add(col)
+    }
+    return transposed
+}
