@@ -47,6 +47,14 @@ enum class DiagonalDirection : Direction {
     };
 }
 
+fun Char.toDirection() = when (this) {
+    '^' -> BaseDirection.UP
+    '>' -> BaseDirection.RIGHT
+    '<' -> BaseDirection.LEFT
+    'v' -> BaseDirection.DOWN
+    else -> throw Exception("Unknown direction: $this")
+}
+
 val allDirections: List<Direction> = BaseDirection.entries.plus(DiagonalDirection.entries)
 
 data class Node(val row: Int, val col: Int) {
