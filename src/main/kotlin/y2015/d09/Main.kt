@@ -1,71 +1,77 @@
 package y2015.d09
 
-import utilities.Node
-import utilities.charGrid
-import utilities.intLines
-import utilities.longLines
+import utilities.*
 import java.io.File
 import kotlin.system.measureTimeMillis
 
 private fun main() {
     val input = File(
-        "src/main/kotlin/y2015/d09/Input-test.txt"
-//        "src/main/kotlin/y2015/d09/Input.txt"
+//        "src/main/kotlin/y2015/d09/Input-test.txt"
+        "src/main/kotlin/y2015/d09/Input.txt"
     ).readText(Charsets.UTF_8)
 
-    println("${
-        measureTimeMillis {
-            println(
-                "part1: ${part1(input)}"
-            )
-        }
-    } ms\n")
+    println(
+        "${
+            measureTimeMillis {
+                println(
+                    "part1: ${part1(input)}"
+                )
+            }
+        } ms\n")
 
-    println("${
-        measureTimeMillis {
-            println(
-                "part2: ${part2(input)}"
-            )
+    println(
+        "${
+            measureTimeMillis {
+                println(
+                    "part2: ${part2(input)}"
+                )
 
-        }
-    } ms")
+            }
+        } ms")
 }
 
+// London to Dublin = 464
+private data class Distance(
+    val locations: Set<String>,
+    val distance: Int,
+)
+
 private fun part1(input: String): Int {
-    val (aInput, bInput) = input.split("\n\n")
-    input.intLines()
-    input.longLines()
-    input.charGrid()
-    input.lines().map { it.toCharArray().toList() }
-    lateinit var currentNode: Node
-    input.lines().mapIndexed { rowIndex, row ->
-        row.toCharArray().toList().mapIndexed { colIndex, c ->
-            if (c == '^') {
-                currentNode = Node(rowIndex, colIndex)
-                '.'
-            } else c
-        }
+    val distancePairs = input.lines().map { line ->
+        val matches = """(.*) to (.*) = ([0-9]+)""".toRegex().find(line)!!
+        Distance(
+            setOf(matches.groupValues[1], matches.groupValues[2]),
+            matches.groupValues[3].toInt(),
+        )
     }
-    input.lines().sumOf { line ->
-        """mul\(([0-9]{1,3}),([0-9]{1,3})\)""".toRegex().findAll(line).map {
-            it.groupValues[1].toInt() to it.groupValues[2].toInt()
-        }.sumOf { (a, b) ->
-            a * b
-        }
-    }
-    input.lines().map { line ->
-        """p=([0-9]+),([0-9]+) v=([\-0-9]+),([\-0-9]+)""".toRegex().find(line)!!.groupValues
-            .drop(1).map {
-                it.toInt()
-            }
-    }
-    input.lines().forEach { line ->
-        """[0-9]+""".toRegex().findAll(line).map(MatchResult::value).map { it.toInt() }
+    val locations = distancePairs.map { it.locations }.flatten().toList().distinct()
+    val distances = locations.associateWith { location ->
+        distancePairs
+            .filter { it.locations.contains(location) }
+            .associate { it.locations.first { it != location } to it.distance }
     }
 
-    return 0
+    return locations.permutations().minOf {
+        it.windowed(2).sumOf { (a, b) -> distances.getValue(a).getValue(b) }
+    }
 }
 
 private fun part2(input: String): Int {
-    return 0
+    val distancePairs = input.lines().map { line ->
+        val matches = """(.*) to (.*) = ([0-9]+)""".toRegex().find(line)!!
+        Distance(
+            setOf(matches.groupValues[1], matches.groupValues[2]),
+            matches.groupValues[3].toInt(),
+        )
+    }
+    val locations = distancePairs.map { it.locations }.flatten().toList().distinct()
+    val distances = locations.associateWith { location ->
+        distancePairs
+            .filter { it.locations.contains(location) }
+            .associate { it.locations.first { it != location } to it.distance }
+    }
+
+    return locations.permutations().maxOf {
+        it.windowed(2).sumOf { (a, b) -> distances.getValue(a).getValue(b) }
+    }
 }

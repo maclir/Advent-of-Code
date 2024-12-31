@@ -85,3 +85,7 @@ fun <T> List<List<T>>.transpose(): List<List<T>> {
     }
     return transposed
 }
+
+fun <E> List<E>.permutations(builtSequence: List<E> = listOf()): List<List<E>> =
+    if (isEmpty()) listOf(builtSequence)
+    else flatMap { (this - it).permutations(builtSequence + it) }

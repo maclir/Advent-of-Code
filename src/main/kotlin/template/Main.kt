@@ -1,11 +1,7 @@
 package template
 
-import utilities.Node
-import utilities.charGrid
-import utilities.intLines
-import utilities.longLines
+import utilities.*
 import java.io.File
-import kotlin.system.measureTimeMillis
 
 private fun main() {
     val input = File(
@@ -13,22 +9,8 @@ private fun main() {
 //        "src/main/kotlin/template/Input.txt"
     ).readText(Charsets.UTF_8)
 
-    println("${
-        measureTimeMillis {
-            println(
-                "part1: ${part1(input)}"
-            )
-        }
-    } ms\n")
-
-    println("${
-        measureTimeMillis {
-            println(
-                "part2: ${part2(input)}"
-            )
-
-        }
-    } ms")
+    printRun(::part1, input)
+    printRun(::part2, input)
 }
 
 private fun part1(input: String): Int {
@@ -45,6 +27,12 @@ private fun part1(input: String): Int {
                 '.'
             } else c
         }
+    }
+    input.lines().map { line ->
+        val matches = """(.*) to (.*) = ([0-9]+)""".toRegex().find(line)!!
+        println(
+            setOf(matches.groupValues[1], matches.groupValues[2], matches.groupValues[3].toInt()),
+        )
     }
     input.lines().sumOf { line ->
         """mul\(([0-9]{1,3}),([0-9]{1,3})\)""".toRegex().findAll(line).map {
